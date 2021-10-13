@@ -14,9 +14,11 @@
 <div class="container">
   <ul class="row grid p-0">
     @each(image in images)
-      <li class="col-6 col-md-3 grid-item" >
-        <img src="{{image.url}}" alt="{{image.name}}" class="img-fluid">
-        <p class="text-center">{{image.name}}</p>
+      <li class="col-6 col-md-4 col-lg-3 grid-item" >
+        <div class="card">
+          <img src="{{image.url}}" alt="{{image.name}}">
+          <p class="text-center">{{image.name}}</p>
+        </div>
       </li>
     @endeach
   </ul>

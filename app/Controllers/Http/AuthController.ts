@@ -11,18 +11,13 @@ export default class AuthController {
     const users = await User.query()
 
     if (!this.validateStore(data, session, users)) {
-        console.log('erro ao validar usuario');
-        
       return response.redirect().back()
     }
 
     try {
       const user = await User.create(data)
       await auth.login(user, true)
-      console.log('logado');
-      
     } catch (error) {
-        console.log('erro no try');
         console.log(error);
         
       return response.redirect().toRoute('auth.register')
@@ -40,11 +35,14 @@ export default class AuthController {
     if (!this.validateVerify(data, session)) {
       return response.redirect().back()
     }
-    await auth.attempt(data.email, data.password)
-    console.log("logado");
-    console.log(auth.user);
-    
 
+    try {
+      await auth.attempt(data.email, data.password)  
+    } catch (error) {
+      session.flash('errors', {"head": 'usuario e/ou senha invalidos'})
+      session.flashAll()
+      return response.redirect().back()  
+    }
     return response.redirect().toRoute('/')
   }
 
