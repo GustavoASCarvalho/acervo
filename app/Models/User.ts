@@ -17,7 +17,19 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
+  public profileImg?: string
+
+  @column()
   public rememberMeToken?: string
+
+  @column()
+  public isAdmin: boolean
+
+  @column()
+  public isModerator: boolean
+
+  @column()
+  public isDeleted: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
