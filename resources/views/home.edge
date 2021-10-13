@@ -2,5 +2,9 @@
 @set('title', 'Home page')
 
 @section('body')
+  @if(auth.isLoggedIn)
+    <p> Hello {{ auth.user.name }} </p>
+  @endif
+
   <p>Home page</p>
 @endsection

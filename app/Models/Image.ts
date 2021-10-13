@@ -21,7 +21,7 @@ export default class Image extends BaseModel {
   public userId: number
 
   @column()
-  public isDeleted: boolean
+  public isDeleted?: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

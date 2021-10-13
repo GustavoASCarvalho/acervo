@@ -1,0 +1,18 @@
+@layout('layouts/main')
+@set('title', 'Home page')
+
+@section('body')
+    <form action="{{route('image.store')}}" method="POST" class="p-3" enctype="multipart/form-data">
+        {{ csrfField() }}
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" placeholder="image" aria-label="image" name="image">
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="name" aria-label="name" name="name">
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="description" aria-label="description" name="description">
+        </div>
+        <button type="submit" class="btn btn-success">Enviar</button>
+    </form>
+@endsection
