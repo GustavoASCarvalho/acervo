@@ -4,11 +4,17 @@ import {
   column,
   beforeSave,
   BaseModel,
+  HasMany,
+  hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
+import Image from './Image'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public name: string
 
   @column()
   public email: string
@@ -23,13 +29,13 @@ export default class User extends BaseModel {
   public rememberMeToken?: string
 
   @column()
-  public isAdmin: boolean
+  public isAdmin?: boolean
 
   @column()
-  public isModerator: boolean
+  public isModerator?: boolean
 
   @column()
-  public isDeleted: boolean
+  public isDeleted?: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -43,4 +49,7 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
+
+  @hasMany(() => Image)
+  public images: HasMany<typeof Image>
 }
