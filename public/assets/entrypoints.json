@@ -7,6 +7,22 @@
       "js": [
         "http://localhost:8080/assets/app.js"
       ]
+    },
+    "nav": {
+      "css": [
+        "http://localhost:8080/assets/nav.css"
+      ],
+      "js": [
+        "http://localhost:8080/assets/nav.js"
+      ]
+    },
+    "image": {
+      "css": [
+        "http://localhost:8080/assets/image.css"
+      ],
+      "js": [
+        "http://localhost:8080/assets/image.js"
+      ]
     }
   }
 }

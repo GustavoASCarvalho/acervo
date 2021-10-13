@@ -2,9 +2,12 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Drive from '@ioc:Adonis/Core/Drive'
 import Application from '@ioc:Adonis/Core/Application'
 import fs from 'fs'
+import Image from 'App/Models/Image'
 
 export default class ImagesController {
-  public async index ({}: HttpContextContract) {
+  public async index ({ view }: HttpContextContract) {
+    const images = await Image.query()
+    return view.render('image/index', { images })
   }
 
   public async create ({ view }: HttpContextContract) {

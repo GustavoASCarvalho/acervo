@@ -4,6 +4,7 @@ Route.get('/', async ({ view }) => {
   return view.render('home')
 })
 
+Route.get('/images', 'ImagesController.index').as('image.index')
 Route.get('/image/create', 'ImagesController.create').as('image.create')
 Route.post('/image/create', 'ImagesController.store').as('image.store')
 

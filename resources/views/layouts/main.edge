@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta leng>
+
     @entryPointScripts('app')
     @entryPointStyles('app')
+
+    @!section('meta')
+
     <title>{{ title }}</title>
   </head>
-  <body class="bg-starorange">
-    @!section('body')
+  <body>
+    @!section('content')  
   </body>
 </html>

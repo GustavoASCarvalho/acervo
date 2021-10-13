@@ -18,6 +18,9 @@ export default class Image extends BaseModel {
   public font?: string
 
   @column()
+  public year?: number
+
+  @column()
   public userId: number
 
   @column()

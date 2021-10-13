@@ -1,0 +1,24 @@
+@layout('layouts/main')
+@set('title', 'Acervo')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, pagina inicial" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+  @entryPointScripts('image')
+  @entryPointStyles('image')
+@endsection
+
+@section('content')
+@!component('components/nav')
+<div class="container">
+  <ul class="row grid p-0">
+    @each(image in images)
+      <li class="col-6 col-md-3 grid-item" >
+        <img src="{{image.url}}" alt="{{image.name}}" class="img-fluid">
+        <p class="text-center">{{image.name}}</p>
+      </li>
+    @endeach
+  </ul>
+</div>
+@endsection
