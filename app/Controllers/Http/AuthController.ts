@@ -2,6 +2,18 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 
 export default class AuthController {
+
+  public async list({ view, auth }: HttpContextContract) {
+    const user = await auth.user
+
+    if (!user || user.isAdmin == false) {
+      return 'error'
+    }
+
+    const users = await User.query().whereNot('id', user.id)
+    return view.render('auth/list', { users })
+  }
+
   public async register({ view }: HttpContextContract) {
     return view.render('auth/register')
   }
@@ -15,7 +27,7 @@ export default class AuthController {
     }
 
     try {
-      const user = await User.create(data)
+      const user = await User.create({ name: data.name, email: data.email, password: data.password})
       await auth.login(user, true)
     } catch (error) {
       session.flash('errors', {"head": "impossivel criar usuario", "register": "display-block"})

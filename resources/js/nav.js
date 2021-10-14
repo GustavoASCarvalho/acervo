@@ -4,11 +4,9 @@ const nav = document.querySelector('nav')
 const h1 = document.querySelector('h1')
 
 const login = document.querySelector('.login')
-const btnLogin = document.querySelector('#btnLogin')
 const closeLogin = document.querySelector('#closeLogin')
 
 const register = document.querySelector('.register')
-const btnRegister = document.querySelector('#btnRegister')
 const closeRegister = document.querySelector('#closeRegister')
 
 const btnOpenRegister = document.querySelector('#openRegister')
@@ -25,7 +23,6 @@ window.addEventListener('scroll', (e)=>{
         h1.classList.remove('fs-5')
         h1.classList.add('fs-3')
     }
-    
 })
 
 btnOpenRegister.onclick = function() {
@@ -36,16 +33,6 @@ btnOpenRegister.onclick = function() {
 btnOpenLogin.onclick = function() {
     register.style.display = "none"
     login.style.display = "block"
-}
-
-btnLogin.onclick = function() {
-    login.style.display = "block";
-    document.documentElement.style.overflow = 'hidden';
-}
-
-btnRegister.onclick = function() {
-    register.style.display = "block";
-    document.documentElement.style.overflow = 'hidden';
 }
   
 closeLogin.onclick = function() {
@@ -65,3 +52,18 @@ window.onclick = function(event) {
         register.style.display = "none";
     }
 }
+
+try {
+    const btnRegister = document.querySelector('#btnRegister')
+    const btnLogin = document.querySelector('#btnLogin')    
+
+    btnLogin.onclick = function() {
+        login.style.display = "block";
+        document.documentElement.style.overflow = 'hidden';
+    }
+    
+    btnRegister.onclick = function() {
+        register.style.display = "block";
+        document.documentElement.style.overflow = 'hidden';
+    }
+} catch {}

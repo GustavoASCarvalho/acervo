@@ -13,6 +13,20 @@
           <a class="nav-link" aria-current="page" href="{{route('image.index')}}">Acervo</a>
         </li>
         @if(auth.isLoggedIn)
+          @if(auth.user.isModerator)
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Administrar
+              </a>
+              <ul class="dropdown-menu p-0 m-0" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Acervo</a></li>
+                <li><a class="dropdown-item" href="#">Postagens</a></li>
+                @if(auth.user.isAdmin)
+                <li><a class="dropdown-item" href="{{route('auth.list')}}">Usuarios</a></li>
+                @endif
+              </ul>
+            </li>
+          @endif
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{auth.user.name}}

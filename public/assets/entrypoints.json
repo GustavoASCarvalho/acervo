@@ -23,6 +23,14 @@
       "js": [
         "http://localhost:8080/assets/image.js"
       ]
+    },
+    "auth": {
+      "css": [
+        "http://localhost:8080/assets/auth.css"
+      ],
+      "js": [
+        "http://localhost:8080/assets/auth.js"
+      ]
     }
   }
 }
