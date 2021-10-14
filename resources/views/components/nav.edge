@@ -34,7 +34,7 @@
   </div>
 </nav>
 {{inspect(flashMessages)}}
-<div class="login">
+<div class="login {{flashMessages.get('errors.login' || '')}}">
   <div class="login-content row">
     <div class="col-12 col-lg-6 position-relative img">
       <div class="position-absolute top-0 start-0">
@@ -50,17 +50,29 @@
         <div class="form-floating my-3">
           <input type="email" class="form-control" name="email" id="emailLogin" placeholder="nome@exemplo.com" autofocus value="{{flashMessages.get('email') || ''}}">
           <label for="emailLogin">Email</label>
-          <div class="form-text">
-            Campo obrigatório
-          </div>
+          @if(flashMessages.get('errors.email'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.email')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
         </div>
         
         <div class="form-floating my-3">
           <input type="password" class="form-control" name="password" id="passwordLogin" placeholder="Senha" value="{{flashMessages.get('password') || ''}}">
           <label for="passwordLogin">Senha</label>
-          <div class="form-text">
-            Campo obrigatório
-          </div>
+          @if(flashMessages.get('errors.password'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.password')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
         </div>
         <div class="checkbox mb-3">
           <label>
@@ -74,7 +86,7 @@
   </div>
 </div>
 
-<div class="register">
+<div class="register {{flashMessages.get('errors.register' || '')}}">
   <div class="register-content row">
     <div class="col-12 col-lg-6 position-relative img">
       <div class="position-absolute top-0 start-0">
@@ -83,41 +95,65 @@
       <img src="{{asset('assets/images/register.svg')}}" alt="" class="img-fluid">
     </div>
     <div class="col-12 col-lg-6">
-      <form action="{{ route('auth.verify') }}" method="post">
+      <form action="{{ route('auth.store') }}" method="post">
         {{ csrfField() }}
 
         <h2 class="h3 mb-3 fw-normal text-center mt-5 mt-lg-0 text-lg-start">Seja Bem-Vindo</h2>
         
         <div class="form-floating my-3">
-          <input type="text" class="form-control" name="name" id="nameRegister" placeholder="Nome" value="{{flashMessages.get('password') || ''}}">
+          <input type="text" class="form-control" name="name" id="nameRegister" placeholder="Nome" autofocus value="{{flashMessages.get('name') || ''}}">
           <label for="nameRegister">Nome</label>
-          <div class="form-text">
-            Campo obrigatório
+          @if(flashMessages.get('errors.name'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.name')}}
           </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
         </div>
 
         <div class="form-floating my-3">
-          <input type="email" class="form-control" name="email" id="emailRegister" placeholder="nome@exemplo.com" autofocus value="{{flashMessages.get('email') || ''}}">
+          <input type="email" class="form-control" name="email" id="emailRegister" placeholder="nome@exemplo.com" value="{{flashMessages.get('email') || ''}}">
           <label for="emailRegister">Email</label>
-          <div class="form-text">
-            Campo obrigatório
-          </div>
+          @if(flashMessages.get('errors.email'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.email')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
         </div>
         
         <div class="form-floating my-3">
           <input type="password" class="form-control" name="password" id="passwordRegister" placeholder="Senha" value="{{flashMessages.get('password') || ''}}">
           <label for="passwordRegister">Senha</label>
-          <div class="form-text">
-            Campo obrigatório
-          </div>
+          @if(flashMessages.get('errors.password'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.password')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
         </div>
 
         <div class="form-floating my-3">
-          <input type="password" class="form-control" name="password2" id="password2Register" placeholder="Senha" value="{{flashMessages.get('password') || ''}}">
+          <input type="password" class="form-control" name="password2" id="password2Register" placeholder="Senha" value="">
           <label for="password2Register">Repetir Senha</label>
-          <div class="form-text">
-            Campo obrigatório
-          </div>
+          @if(flashMessages.get('errors.password2'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.password2')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
         </div>
 
         <button class="w-100 btn btn-lg btn-dark" type="submit">Registrar</button>

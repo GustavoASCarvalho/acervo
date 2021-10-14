@@ -48,7 +48,7 @@ form a {
     cursor: pointer;
 }
 
-.login {
+.login, .register {
     display: none;
     position: fixed;
     z-index: 1031;
@@ -67,54 +67,18 @@ form a {
         align-items: center;
     }
 
-    #closeLogin{
+    #closeLogin, #closeRegister{
         height: 40px;
         width: 40px;
     }
 
-    .login-content {
-        background-color: #fefefe;
-        margin: 10% auto;
-        border: none;
-        padding: 20px;
-        width: 80%;
-        min-height: 420px;
-        box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
-        border-radius: 15px;
-    }
-}
-
-.register {
-    display: none;
-    position: fixed;
-    z-index: 1031;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    .img {
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #closeRegister{
-        height: 40px;
-        width: 40px;
-    }
-
-    .register-content {
+    .login-content, .register-content {
         background-color: #fefefe;
         margin: 5% auto;
         border: none;
         padding: 20px;
         width: 80%;
-        min-height: 420px;
+        min-height: 536px;
         box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
         border-radius: 15px;
     }
@@ -122,4 +86,7 @@ form a {
 
 .display-block {
     display: block;
+    body {
+        overflow: hidden;
+    }
 }

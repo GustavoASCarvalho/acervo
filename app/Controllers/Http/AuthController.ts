@@ -7,7 +7,7 @@ export default class AuthController {
   }
 
   public async store({ request, response, auth, session }: HttpContextContract) {
-    const data = request.only(['name', 'email', 'password'])
+    const data = request.only(['name', 'email', 'password', 'password2'])
     const users = await User.query()
 
     if (!this.validateStore(data, session, users)) {
@@ -18,9 +18,9 @@ export default class AuthController {
       const user = await User.create(data)
       await auth.login(user, true)
     } catch (error) {
-        console.log(error);
-        
-      return response.redirect().toRoute('auth.register')
+      session.flash('errors', {"head": "impossivel criar usuario", "register": "display-block"})
+      session.flashAll()
+      return response.redirect().back()
     }
     return response.redirect().toRoute('/')
   }
@@ -39,7 +39,7 @@ export default class AuthController {
     try {
       await auth.attempt(data.email, data.password)  
     } catch (error) {
-      session.flash('errors', {"head": 'usuario e/ou senha invalidos'})
+      session.flash('errors', {"head": "usuario e/ou senha invalidos", "login": "display-block"})
       session.flashAll()
       return response.redirect().back()  
     }
@@ -58,8 +58,8 @@ export default class AuthController {
       this.registerError(errors, 'name', 'Campo obrigatório')
     } else if (data.name.length < 3) {
       this.registerError(errors, 'name', 'Nome precisa ter pelo menos 3 caracteres')
-    } else if (data.name.length > 25) {
-      this.registerError(errors, 'name', 'Nome precisa ter no máximo 25 caracteres')
+    } else if (data.name.length > 40) {
+      this.registerError(errors, 'name', 'Nome precisa ter no máximo 40 caracteres')
     }
 
     if (!data.email) {
@@ -80,7 +80,14 @@ export default class AuthController {
       this.registerError(errors, 'password', 'Senha precisa ter no máximo 16 caracteres')
     }
 
+    if (!data.password2) {
+      this.registerError(errors, 'password2', 'Campo obrigatório')
+    } else if (data.password2 != data.password) {
+      this.registerError(errors, 'password2', 'As senhas não conferem')
+    } 
+
     if (Object.entries(errors).length > 0) {
+      this.registerError(errors, 'register', 'display-block')
       session.flash('errors', errors)
       session.flashAll()
       return false
@@ -100,6 +107,7 @@ export default class AuthController {
     }
 
     if (Object.entries(errors).length > 0) {
+      this.registerError(errors, 'login', 'display-block')
       session.flash('errors', errors)
       session.flashAll()
 

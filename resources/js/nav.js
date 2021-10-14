@@ -25,7 +25,15 @@ window.addEventListener('scroll', (e)=>{
         h1.classList.remove('fs-5')
         h1.classList.add('fs-3')
     }
+    
 })
+
+console.log(login.style.display);
+
+if(login.style || register.style.display == "block") {
+    console.log("aaa");
+    document.documentElement.style.overflow = 'hidden';
+}
 
 btnOpenRegister.onclick = function() {
     login.style.display = "none"
