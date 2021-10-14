@@ -27,7 +27,7 @@ export default class AuthController {
     }
 
     try {
-      const user = await User.create({ name: data.name, email: data.email, password: data.password})
+      const user = await User.create({ name: data.name, email: data.email, password: data.password, profileImg: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'})
       await auth.login(user, true)
     } catch (error) {
       session.flash('errors', {"head": "impossivel criar usuario", "register": "display-block"})
@@ -50,6 +50,12 @@ export default class AuthController {
 
     try {
       await auth.attempt(data.email, data.password)  
+      if (auth.user?.isDeleted) {
+        session.flash('errors', {"head": "usuario e/ou senha invalidos", "login": "display-block"})
+        session.flashAll()
+        return response.redirect().back()  
+      }
+      // TODO: usar os erros do head
     } catch (error) {
       session.flash('errors', {"head": "usuario e/ou senha invalidos", "login": "display-block"})
       session.flashAll()
@@ -62,6 +68,30 @@ export default class AuthController {
     await auth.logout()
     response.redirect().toRoute('/')
   }
+
+  public async edit({ params, view }: HttpContextContract) {
+    const user = await User.query().where('id', params.id).firstOrFail()
+    return view.render('auth/edit', {user})
+  }
+
+  public async update({ request, params, view }: HttpContextContract) {
+    const data = request.only(['name','email','admin','moderator','deleted'])
+
+    const user = await User.query().where('id', params.id).firstOrFail()
+
+
+    user.name = data.name
+    user.email = data.email
+    user.isAdmin = data.admin || false
+    user.isModerator = data.moderator || false
+    user.isDeleted = data.deleted || false
+
+    await user.save()
+  
+    return view.render('auth/edit', {user})
+  }
+
+
 
   private validateStore(data, session, users): Boolean {
     const errors = {}

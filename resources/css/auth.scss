@@ -1,0 +1,14 @@
+main img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 50%;
+    transition: all .3s;
+}
+
+main {
+    img:hover, img:focus {
+        cursor: pointer;
+        transform: scale(1.05);
+        filter: opacity(0.8);
+    }
+}
