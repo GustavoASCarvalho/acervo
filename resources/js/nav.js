@@ -28,13 +28,6 @@ window.addEventListener('scroll', (e)=>{
     
 })
 
-console.log(login.style.display);
-
-if(login.style || register.style.display == "block") {
-    console.log("aaa");
-    document.documentElement.style.overflow = 'hidden';
-}
-
 btnOpenRegister.onclick = function() {
     login.style.display = "none"
     register.style.display = "block"
