@@ -14,7 +14,7 @@ export default class ImagesController {
     return view.render('image/create')
   }
 
-  public async store ({ request, response, auth }: HttpContextContract) {
+  public async store ({ request, response, auth, session }: HttpContextContract) {
     const user = auth.user
     const s3 = Drive.use('s3')    
 
@@ -40,11 +40,12 @@ export default class ImagesController {
         await s3.put(filePath, data).then( async () => {
           const url = await s3.getUrl(filePath)
           await user.related('images').create({'name': fileData.name, 'description': fileData.description, 'url': url})
-          return response.redirect().toRoute('image.create')
         })
       }
     })
-    return response.json({'Ola': 'ads'})
+    session.flash('errors', {"success": `Imagem cadastrada com sucesso`})
+    session.flashAll()
+    return response.redirect().toRoute('image.create')
   } 
 
   public async show ({}: HttpContextContract) {

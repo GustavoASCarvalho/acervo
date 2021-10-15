@@ -61,6 +61,11 @@
         {{ csrfField() }}
 
         <h2 class="h3 mb-3 fw-normal text-center mt-5 mt-lg-0 text-lg-start">Seja Bem-Vindo</h2>
+        @if(flashMessages.get('errors.headLogin'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.headLogin')}}
+          </div>
+        @endif
         <div class="form-floating my-3">
           <input type="email" class="form-control" name="email" id="emailLogin" placeholder="nome@exemplo.com" autofocus value="{{flashMessages.get('email') || ''}}">
           <label for="emailLogin">Email</label>
@@ -90,7 +95,7 @@
         </div>
         <div class="checkbox mb-3">
           <label>
-            <input class="form-check-input" type="checkbox" name="remember" value="true">Lembrar de mim
+            <input class="form-check-input" type="checkbox" name="remember" value="true"> Lembrar de mim
           </label>
         </div>
         <button class="w-100 btn btn-lg btn-dark" type="submit">Entrar</button>
@@ -113,6 +118,11 @@
         {{ csrfField() }}
 
         <h2 class="h3 mb-3 fw-normal text-center mt-5 mt-lg-0 text-lg-start">Seja Bem-Vindo</h2>
+        @if(flashMessages.get('errors.headRegister'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.headRegister')}}
+          </div>
+        @endif
         
         <div class="form-floating my-3">
           <input type="text" class="form-control" name="name" id="nameRegister" placeholder="Nome" autofocus value="{{flashMessages.get('name') || ''}}">

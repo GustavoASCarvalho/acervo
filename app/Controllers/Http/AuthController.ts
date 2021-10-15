@@ -30,7 +30,7 @@ export default class AuthController {
       const user = await User.create({ name: data.name, email: data.email, password: data.password, profileImg: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'})
       await auth.login(user, true)
     } catch (error) {
-      session.flash('errors', {"head": "impossivel criar usuario", "register": "display-block"})
+      session.flash('errors', {"headRegister": "Impossivel criar usuario", "register": "display-block"})
       session.flashAll()
       return response.redirect().back()
     }
@@ -53,14 +53,13 @@ export default class AuthController {
     try {
       await auth.attempt(data.email, data.password)  
       if (auth.user?.isDeleted) {
-        session.flash('errors', {"head": "usuario e/ou senha invalidos", "login": "display-block"})
+        session.flash('errors', {"headLogin": "Usuario e/ou senha invalidos", "login": "display-block"})
         session.flashAll()
         await auth.logout()
         return response.redirect().back()  
       }
-      // TODO: usar os erros do head
     } catch (error) {
-      session.flash('errors', {"head": "usuario e/ou senha invalidos", "login": "display-block"})
+      session.flash('errors', {"headLogin": "Usuario e/ou senha invalidos", "login": "display-block"})
       session.flashAll()
       return response.redirect().back()  
     }
@@ -82,12 +81,10 @@ export default class AuthController {
     return view.render('auth/edit', {user})
   }
 
-  public async update({ request, params, view, session, response }: HttpContextContract) {
+  public async update({ request, params, session, response }: HttpContextContract) {
     const data = request.only(['name','email','admin','moderator','deleted'])
 
     const user = await User.query().where('id', params.id).firstOrFail()
-    const users = await User.query().whereNot('id', user.id)
-
 
     user.name = data.name
     user.email = data.email
@@ -102,8 +99,6 @@ export default class AuthController {
     
     return response.redirect().back()
   }
-
-
 
   private validateStore(data, session, users): Boolean {
     const errors = {}

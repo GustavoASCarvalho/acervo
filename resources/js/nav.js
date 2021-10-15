@@ -25,6 +25,10 @@ window.addEventListener('scroll', (e)=>{
     }
 })
 
+if(register.classList[1] == 'display-block' || login.classList[1] == 'display-block'){
+    document.documentElement.style.overflow = 'hidden';
+}
+
 btnOpenRegister.onclick = function() {
     login.style.display = "none"
     register.style.display = "block"
