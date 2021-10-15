@@ -14,7 +14,7 @@
 <main class="container">
   <div class="row">
     <div class="col"></div>
-    <div class="col-8 p-5 my-5 border">
+    <div class="col-8 p-5 my-5 border border-4">
       <form action="{{route('auth.update', {id: user.id})}}" method="POST">
         {{ csrfField() }}
         <div class="d-flex justify-content-center mb-3">
@@ -67,6 +67,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-center my-5">
+          <a class="btn btn-dark me-2" href="{{route('auth.list')}}">Voltar</a>
           <button class="btn btn-success" type="submit">
             Salvar Alterações
           </button>

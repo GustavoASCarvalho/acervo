@@ -34,6 +34,8 @@ export default class AuthController {
       session.flashAll()
       return response.redirect().back()
     }
+    session.flash('errors', {"success": "Conta criada com sucesso"})
+    session.flashAll()
     return response.redirect().toRoute('/')
   }
 
@@ -53,6 +55,7 @@ export default class AuthController {
       if (auth.user?.isDeleted) {
         session.flash('errors', {"head": "usuario e/ou senha invalidos", "login": "display-block"})
         session.flashAll()
+        await auth.logout()
         return response.redirect().back()  
       }
       // TODO: usar os erros do head
@@ -61,11 +64,16 @@ export default class AuthController {
       session.flashAll()
       return response.redirect().back()  
     }
+    const user = await auth.user
+    session.flash('errors', {"success": `Bem-vindo, ${user?.name}!`})
+    session.flashAll()
     return response.redirect().toRoute('/')
   }
 
-  public async logout({ response, auth }: HttpContextContract) {
+  public async logout({ response, auth, session }: HttpContextContract) {
     await auth.logout()
+    session.flash('errors', {"success": `Usuario desconectado`})
+    session.flashAll()
     response.redirect().toRoute('/')
   }
 
@@ -74,10 +82,11 @@ export default class AuthController {
     return view.render('auth/edit', {user})
   }
 
-  public async update({ request, params, view }: HttpContextContract) {
+  public async update({ request, params, view, session, response }: HttpContextContract) {
     const data = request.only(['name','email','admin','moderator','deleted'])
 
     const user = await User.query().where('id', params.id).firstOrFail()
+    const users = await User.query().whereNot('id', user.id)
 
 
     user.name = data.name
@@ -87,8 +96,11 @@ export default class AuthController {
     user.isDeleted = data.deleted || false
 
     await user.save()
-  
-    return view.render('auth/edit', {user})
+    
+    session.flash('errors', {"success": `Usuario atualizado`})
+    session.flashAll()
+    
+    return response.redirect().back()
   }
 
 

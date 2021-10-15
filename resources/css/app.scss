@@ -21,3 +21,18 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
   border-color: #212121d0;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 0, 0, 0.075);
 }
+
+.alert-card {
+  position: fixed;
+  z-index: 3000;
+  bottom: 3%;
+  left: 3%;
+  padding: 10px;
+  border: 1px solid #bcbebf;
+  border-radius: 5px;
+  color: #141619;
+  background-color: #d3d3d4;
+  a:hover {
+    cursor: pointer;
+  }
+}

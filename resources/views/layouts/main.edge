@@ -13,6 +13,15 @@
     <title>{{ title }}</title>
   </head>
   <body>
+    {{inspect(flashMessages.all())}}
+    @if(flashMessages.get('errors.success'))
+      <div class="alert-card">
+        {{flashMessages.get('errors.success')}}
+        <a><i class="bi bi-x alert-btn"></i></a>
+      </div>
+    @endif
+    
+    
     @!section('content')  
   </body>
 </html>
