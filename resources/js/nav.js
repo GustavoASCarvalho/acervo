@@ -1,7 +1,6 @@
 import '../css/nav.scss'
 
 const nav = document.querySelector('nav')
-const h1 = document.querySelector('h1')
 
 const login = document.querySelector('.login')
 const closeLogin = document.querySelector('#closeLogin')
@@ -12,16 +11,16 @@ const closeRegister = document.querySelector('#closeRegister')
 const btnOpenRegister = document.querySelector('#openRegister')
 const btnOpenLogin = document.querySelector('#openLogin')
 
+const logo = document.querySelector('.logo-div')
+
 window.addEventListener('scroll', (e)=>{
     var height = window.pageYOffset
     if (height > 100) {
         nav.classList.add('scroll')
-        h1.classList.remove('fs-3')
-        h1.classList.add('fs-5')
+        logo.style.transform = "scale(0.6)"
     }else {
         nav.classList.remove('scroll')
-        h1.classList.remove('fs-5')
-        h1.classList.add('fs-3')
+        logo.style.transform = "scale(1.0)"
     }
 })
 

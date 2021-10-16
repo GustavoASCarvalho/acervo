@@ -9,3 +9,9 @@ try {
         card.style.display = "none";
     }
 } catch (error) {}
+
+try {
+    const image = document.querySelectorAll('.carousel-item')    
+    image[0].classList.add('active')    
+} catch (error) {}
+

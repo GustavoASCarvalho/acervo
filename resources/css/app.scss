@@ -36,3 +36,12 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
     cursor: pointer;
   }
 }
+
+#carrousel{
+  height: 400px;
+  
+  img {
+    height: 400px;
+    object-fit: cover;
+  }
+}

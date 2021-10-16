@@ -14,11 +14,24 @@ export default class AuthController {
     return view.render('auth/list', { users })
   }
 
-  public async register({ view }: HttpContextContract) {
+  public async register({ view, auth }: HttpContextContract) {
+    const user = await auth.user
+
+    if(user) {
+      return 'error'
+    }
+
     return view.render('auth/register')
   }
 
   public async store({ request, response, auth, session }: HttpContextContract) {
+
+    const user = await auth.user
+
+    if(user){
+      return 'error'
+    }
+
     const data = request.only(['name', 'email', 'password', 'password2'])
     const users = await User.query()
 
@@ -39,7 +52,13 @@ export default class AuthController {
     return response.redirect().toRoute('/')
   }
 
-  public async login({ view }: HttpContextContract) {
+  public async login({ view, auth }: HttpContextContract) {
+    const user = await auth.user
+
+    if(user) {
+      return 'error'
+    }
+
     return view.render('auth/login')
   }
 

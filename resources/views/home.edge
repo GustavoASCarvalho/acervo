@@ -9,87 +9,48 @@
 
 @section('content')
 @!component('components/nav')
-<main class="container">
-  <p>ahome</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
-  <p>a</p>
+<div id="carrousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carrousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carrousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carrousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    @each(image in images)
+    <div class="carousel-item" data-bs-interval="5000">
+      <img src="{{image.url}}" class="d-block w-100" alt="{{image.name}}">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>{{image.name}}</h5>
+        <p>{{image.description}}</p>
+      </div>
+    </div>
+    @endeach
+  <button class="carousel-control-prev" type="button" data-bs-target="#carrousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carrousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<main class="container mt-5">
+  <div class="row">
+    <div class="col-8">
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+      <p>ola</p>
+    </div>
+    <div class="col-4">
+      <p>plaa</p>
+    </div>
+  </div>
 </main>
 @endsection

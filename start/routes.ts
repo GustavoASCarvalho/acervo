@@ -1,7 +1,9 @@
 import Route from '@ioc:Adonis/Core/Route'
+import Image from 'App/Models/Image'
 
 Route.get('/', async ({ view }) => {
-  return view.render('home')
+  const images = await Image.query().limit(3).orderBy('created_at', 'desc')
+  return view.render('home', { images })
 })
 
 Route.group(() => {

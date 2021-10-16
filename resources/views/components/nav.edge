@@ -1,6 +1,11 @@
+<div class="spacer">
+</div>
 <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
   <div class="container">
-    <a class="navbar-brand" href="{{route('/')}}"><h1 class="fs-3">Acervo Digital de<br>Paranaguá</h1></a>
+    <div class="d-flex align-items-center logo-div">
+      <img src="{{asset('assets/images/logo.png')}}" alt="Brasão de paranaguá" class="logo">
+      <a class="navbar-brand ms-1" href="{{route('/')}}"><h1 class="fs-3">Acervo Digital<br>de Paranaguá</h1></a>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -21,6 +26,7 @@
               <ul class="dropdown-menu p-0 m-0" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#">Acervo</a></li>
                 <li><a class="dropdown-item" href="#">Postagens</a></li>
+                <li><a class="dropdown-item" href="{{route('image.create')}}">Adicionar imagem</a></li>
                 @if(auth.user.isAdmin)
                 <li><a class="dropdown-item" href="{{route('auth.list')}}">Usuarios</a></li>
                 @endif
