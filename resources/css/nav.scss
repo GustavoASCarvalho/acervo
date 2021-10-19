@@ -1,12 +1,20 @@
-.spacer {
-    height: 150px;
-    background-color: rgb(44, 44, 44);
+body{
+    margin-top: 150px;
 }
 
 nav {
     height: 150px;
     box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.3);
     transition: all .5s;
+
+    h1 {
+        font-size: 25px;
+        font-family: 'Merriweather Sans', sans-serif;
+        font-weight: 700;
+        p{
+            font-weight: 300;
+        }
+    }
     .navbar-nav {
         align-items: center;
     }
@@ -15,6 +23,7 @@ nav {
         .li-hover {
             border-bottom: 3px transparent solid;
             transition: all .3s;
+            font-weight: 700;
         }
         .li-hover:hover {
             border-bottom: 3px #000 solid;
@@ -23,7 +32,7 @@ nav {
     }
 
     .navbar-collapse {
-        background-color: rgb(248, 249, 250);
+        background-color: #f2f1eb;
         .nav-link {
             padding: 10px;
         }
@@ -44,8 +53,8 @@ nav {
         }
         background-color: rgba(255, 255, 255, 0.2);
     }   
-    .spacer {
-        height: 94px;
+    body {
+        margin-top: 94px;
     }
 }
 

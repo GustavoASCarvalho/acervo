@@ -1,0 +1,66 @@
+@layout('layouts/main')
+@set('title', 'login')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, pagina inicial" />
+@endsection
+
+@section('content') 
+<div class="container my-5 bg-light border p-3">
+    <div class="row">
+     
+            <div class="col-12 col-lg-6 position-relative img">
+              <div class="position-absolute top-0 start-0">
+                <button type="button" class="btn btn-dark" id="closeLogin">X</button>
+              </div>
+              <img src="{{asset('assets/images/login.svg')}}" alt="" class="img-fluid">
+            </div>
+            <div class="col-12 col-lg-6">
+              <form action="{{ route('auth.verify') }}" method="post">
+                {{ csrfField() }}
+        
+                <h2 class="h3 mb-3 fw-normal text-center mt-5 mt-lg-0 text-lg-start">Seja Bem-Vindo</h2>
+                @if(flashMessages.get('errors.headLogin'))
+                  <div class="invalid-feedback d-block">
+                    {{flashMessages.get('errors.headLogin')}}
+                  </div>
+                @endif
+                <div class="form-floating my-3">
+                  <input type="email" class="form-control" name="email" id="emailLogin" placeholder="nome@exemplo.com" autofocus value="{{flashMessages.get('email') || ''}}">
+                  <label for="emailLogin">Email</label>
+                  @if(flashMessages.get('errors.email'))
+                    <div class="invalid-feedback d-block">
+                      {{flashMessages.get('errors.email')}}
+                    </div>
+                  @else
+                    <div class="form-text">
+                      Campo obrigatório
+                    </div>
+                  @endif
+                </div>
+                
+                <div class="form-floating my-3">
+                  <input type="password" class="form-control" name="password" id="passwordLogin" placeholder="Senha" value="{{flashMessages.get('password') || ''}}">
+                  <label for="passwordLogin">Senha</label>
+                  @if(flashMessages.get('errors.password'))
+                    <div class="invalid-feedback d-block">
+                      {{flashMessages.get('errors.password')}}
+                    </div>
+                  @else
+                    <div class="form-text">
+                      Campo obrigatório
+                    </div>
+                  @endif
+                </div>
+                <div class="checkbox mb-3">
+                  <label>
+                    <input class="form-check-input" type="checkbox" name="remember" value="true"> Lembrar de mim
+                  </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-dark" type="submit">Entrar</button>
+                <span>Não tem uma conta ? <a class="link" id="openRegister">Registre agora</a></span>
+              </form>
+            </div>
+    </div>
+</div>
+@endsection

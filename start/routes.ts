@@ -17,6 +17,8 @@ Route.group(() => {
 Route.get('/images', 'ImagesController.index').as('image.index')
 
 
+Route.get('/register', 'AuthController.register').as('auth.register')
+Route.get('/login', 'AuthController.login').as('auth.login')
 Route.post('/register', 'AuthController.store').as('auth.store')
 Route.post('/login', 'AuthController.verify').as('auth.verify')
 Route.get('/logout', 'AuthController.logout').as('auth.logout')

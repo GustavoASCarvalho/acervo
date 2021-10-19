@@ -5,7 +5,8 @@
 $starorange: #df711b;
 
 $custom-theme-colors: (
-  "starorange": $starorange
+  "starorange": $starorange,
+  "background": #f2f1eb
 );
 
 $theme-colors: map-merge($theme-colors, $custom-theme-colors);
@@ -16,6 +17,10 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
 
 @import '~bootstrap';
 @import '~bootstrap-icons/font/bootstrap-icons.css';
+
+body {
+  font-family: 'Merriweather', serif;
+}
 
 .form-control:focus {
   border-color: #212121d0;
@@ -43,5 +48,24 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
   img {
     height: 400px;
     object-fit: cover;
+    opacity: 90%;
+  }
+
+  h5{
+    text-shadow: 0 1px 3px #262626, 0 1px 5px #000000;
+    font-style: italic;
+    font-size: 21px;
+    font-weight: 300;
+  }
+
+}
+
+main {  
+  ::-webkit-input-placeholder {
+    text-align: center;
+  }
+  
+  :-moz-placeholder {
+    text-align: center;
   }
 }

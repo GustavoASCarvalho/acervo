@@ -8,8 +8,8 @@
   "assets/auth.css": "http://localhost:8080/assets/auth.css",
   "assets/auth.js": "http://localhost:8080/assets/auth.js",
   "assets/fonts/bootstrap-icons.woff?": "http://localhost:8080/assets/fonts/bootstrap-icons.94eeade1.woff",
+  "assets/images/logo.png": "http://localhost:8080/assets/images/logo.7df27599.png",
   "assets/fonts/bootstrap-icons.woff2?": "http://localhost:8080/assets/fonts/bootstrap-icons.dfd0ea12.woff2",
   "assets/images/register.svg": "http://localhost:8080/assets/images/register.24119542.svg",
-  "assets/images/login.svg": "http://localhost:8080/assets/images/login.a6ee2c65.svg",
-  "assets/images/logo.png": "http://localhost:8080/assets/images/logo.7df27599.png"
+  "assets/images/login.svg": "http://localhost:8080/assets/images/login.a6ee2c65.svg"
 }
