@@ -49,6 +49,7 @@ body {
     height: 400px;
     object-fit: cover;
     opacity: 90%;
+    background-color: #141619;
   }
 
   h5{
@@ -68,4 +69,21 @@ main {
   :-moz-placeholder {
     text-align: center;
   }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f2f1eb
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(56, 56, 56);
+  border-radius: 10 px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(51, 51, 51);
 }

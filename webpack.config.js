@@ -49,6 +49,7 @@ Encore.addEntry('app', './resources/js/app.js')
 Encore.addEntry('nav', './resources/js/nav.js')
 Encore.addEntry('image', './resources/js/image.js')
 Encore.addEntry('auth', './resources/js/auth.js')
+Encore.addEntry('post', './resources/js/post.js')
 
 /*
 |--------------------------------------------------------------------------

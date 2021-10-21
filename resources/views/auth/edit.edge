@@ -18,7 +18,7 @@
       <form action="{{route('auth.update', {id: user.id})}}" method="POST">
         {{ csrfField() }}
         <div class="d-flex justify-content-center mb-3">
-          <img src="{{user.profileImg}}" alt="foto de perfil do {{user.name}}" class="img-fluid">
+          <img src="{{user.profileImg}}" alt="foto de perfil do {{user.name}}">
         </div>
         <div class="form-floating form-floating-sm mb-3">
           <input type="text" class="form-control " id="name" placeholder="João da Silva" value="{{user.name}}" name="name">

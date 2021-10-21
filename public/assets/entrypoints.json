@@ -31,6 +31,14 @@
       "js": [
         "http://localhost:8080/assets/auth.js"
       ]
+    },
+    "post": {
+      "css": [
+        "http://localhost:8080/assets/post.css"
+      ],
+      "js": [
+        "http://localhost:8080/assets/post.js"
+      ]
     }
   }
 }

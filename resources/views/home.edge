@@ -17,7 +17,7 @@
   </div>
   <div class="carousel-inner">
     @each(image in images)
-    <div class="carousel-item" data-bs-interval="5000">
+    <div class="carousel-item" data-bs-interval="3000">
       <img src="{{image.url}}" class="d-block w-100" alt="{{image.name}}">
       <div class="carousel-caption d-none d-md-block">
         <h5>{{image.name}}</h5>
@@ -33,9 +33,19 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<main class="container mt-5">
-  <div class="my-5">
-    <input type="text" class="form-control bg-background" id="exampleFormControlInput1" placeholder="PESQUISAR">
+<main class="container my-5">
+  <div class="row">
+    @each(post in posts)
+      <div class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch my-2">
+        <div class="card">
+          <img src="{{post.image.url}}" class="card-img-top" alt="{{post.image.name}}">
+          <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.description}}</p>
+          </div>
+        </div>
+      </div>
+    @endeach
   </div>
 </main>
 @endsection

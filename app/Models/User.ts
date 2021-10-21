@@ -8,6 +8,7 @@ import {
   hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Image from './Image'
+import Post from './Post'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -52,4 +53,7 @@ export default class User extends BaseModel {
 
   @hasMany(() => Image)
   public images: HasMany<typeof Image>
+
+  @hasMany(() => Post)
+  public posts: HasMany<typeof Post>
 }
