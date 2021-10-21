@@ -3,10 +3,11 @@
 @import '~bootstrap/scss/mixins';
 
 $starorange: #df711b;
+$background: #f2f1eb;
 
 $custom-theme-colors: (
   "starorange": $starorange,
-  "background": #f2f1eb
+  "background": $background
 );
 
 $theme-colors: map-merge($theme-colors, $custom-theme-colors);
@@ -52,22 +53,21 @@ body {
     background-color: #141619;
   }
 
-  h5{
-    text-shadow: 0 1px 3px #262626, 0 1px 5px #000000;
-    font-style: italic;
-    font-size: 21px;
+  h3{
+    font-family: 'Merriweather Sans', sans-serif;
     font-weight: 300;
+  }
+
+  .carousel-control-next, .carousel-control-prev {
+    background-color: rgba(242, 241, 235, 0.6);
   }
 
 }
 
-main {  
-  ::-webkit-input-placeholder {
-    text-align: center;
-  }
-  
-  :-moz-placeholder {
-    text-align: center;
+.card-img {
+  img {
+    object-fit: cover;
+    height: 300px;
   }
 }
 

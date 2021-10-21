@@ -9,7 +9,7 @@
 
 @section('content')
 @!component('components/nav')
-<div id="carrousel" class="carousel slide" data-bs-ride="carousel">
+<div id="carrousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carrousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carrousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -20,7 +20,7 @@
     <div class="carousel-item" data-bs-interval="3000">
       <img src="{{image.url}}" class="d-block w-100" alt="{{image.name}}">
       <div class="carousel-caption d-none d-md-block">
-        <h5>{{image.name}}</h5>
+        <h3>{{image.name}}</h3>
       </div>
     </div>
     @endeach
@@ -32,12 +32,13 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
+  </div>
 </div>
 <main class="container my-5">
   <div class="row">
     @each(post in posts)
       <div class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch my-2">
-        <div class="card">
+        <div class="card card-img">
           <img src="{{post.image.url}}" class="card-img-top" alt="{{post.image.name}}">
           <div class="card-body">
             <h5 class="card-title">{{post.title}}</h5>

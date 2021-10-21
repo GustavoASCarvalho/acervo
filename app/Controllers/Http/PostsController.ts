@@ -17,7 +17,7 @@ export default class PostsController {
     if (!this.validateCreatePost(data, session)) {
       return response.redirect().back()
     }
-    await Post.create({ 'imageId': 1, 'userId': user?.id, 'title': data.title, 'description': data.text })
+    await Post.create({ 'imageId': 6, 'userId': user?.id, 'title': data.title, 'description': data.text })
     response.redirect().back()
   }
 

@@ -1,10 +1,10 @@
 import Masonry from 'masonry-layout'
 import '../css/image.scss'
 
-const grid = document.querySelector('.grid')
+const grid = document.querySelector('#grid')
 
-window.addEventListener('load', ()=>{
+window.addEventListener('load', () => {
     new Masonry(grid, {
-        itemSelector: '.grid-item'
+        itemSelector: '.col'
     })
 })
