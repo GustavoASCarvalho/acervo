@@ -13,35 +13,46 @@
 @!component('components/nav')
 <div style="height: 20px"></div>
 <div class="container">
-    <form action="{{ route('post.store') }}" method="post">
+  
+    <form action="{{ route('post.store', {id: image.id }) }}" method="post">
         {{ csrfField() }}
-        <div class="form-floating my-3">
-            <input type="text" class="form-control" name="title" id="title" placeholder="Titulo" autofocus value="{{flashMessages.get('title') || ''}}">
-            <label for="title">Titulo da publicação</label>
-            @if(flashMessages.get('errors.title'))
-              <div class="invalid-feedback d-block">
-                {{flashMessages.get('errors.title')}}
-              </div>
-            @else
-              <div class="form-text">
-                Campo obrigatório
-              </div>
-            @endif
-        </div>
-
-        <div class="form-floating my-3">
-          <textarea class="form-control" placeholder="Descrição" id="text" name="text" style="min-height: 200px">{{flashMessages.get('text') || ''}}</textarea>
-          <label for="text">Descrição</label>
-          
-          @if(flashMessages.get('errors.text'))
-            <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.text')}}
+        
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <h3>Dados da publicação</h3>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" name="title" id="title" placeholder="Titulo" autofocus value="{{flashMessages.get('title') || ''}}">
+              <label for="title">Titulo</label>
+              @if(flashMessages.get('errors.title'))
+                <div class="invalid-feedback d-block">
+                  {{flashMessages.get('errors.title')}}
+                </div>
+              @else
+                <div class="form-text">
+                  Campo obrigatório
+                </div>
+              @endif
+           </div>
+  
+            <div class="form-floating my-3">
+              <textarea class="form-control" placeholder="Descrição" id="text" name="text" style="min-height: 200px">{{flashMessages.get('text') || ''}}</textarea>
+              <label for="text">Descrição</label>
+              
+              @if(flashMessages.get('errors.text'))
+                <div class="invalid-feedback d-block">
+                  {{flashMessages.get('errors.text')}}
+                </div>
+              @else
+                <div class="form-text">
+                  Campo obrigatório
+                </div>
+              @endif
             </div>
-          @else
-            <div class="form-text">
-              Campo obrigatório
-            </div>
-          @endif
+          </div>
+          <div class="col-12 col-md-6 form-img d-flex flex-column align-items-center">
+            <h3>Documento contemplado</h3>
+            <img src="{{image.url}}" alt="{{image.name}}" class="img-fluid my-1">
+          </div>
         </div>
         <button class="w-100 btn btn-lg btn-dark" type="submit">Postar</button>
     </form>

@@ -14,6 +14,19 @@ export default class ImagesController {
     return view.render('image/create')
   }
 
+  public async search({ view, request }: HttpContextContract) {
+    const data = request.only(['search'])
+    var images
+    if (data.search) {
+      images = await Image.query().where('name', 'like', `%${data.search}%`)
+    } else {
+      images = await Image.query()
+    }
+
+
+    return view.render('image/index', { images })
+  }
+
   public async store({ request, response, auth, session }: HttpContextContract) {
     const user = auth.user
     const s3 = Drive.use('s3')

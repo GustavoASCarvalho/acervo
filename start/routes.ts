@@ -2,14 +2,21 @@ import Route from '@ioc:Adonis/Core/Route'
 import Image from 'App/Models/Image'
 import Post from 'App/Models/Post'
 
+import { format } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+
+
 Route.get('/', async ({ view }) => {
-  const images = await Image.query().limit(3).orderBy('created_at', 'desc')
-  const posts = await Post.query().limit(3).orderBy('created_at', 'desc')
+  const images = await Image.query().limit(4).orderBy('created_at', 'desc')
+  const posts = await Post.query().limit(5).orderBy('created_at', 'desc')
   const allImage = await Image.query()
-  
+  posts.forEach(post => {
+    post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
+  })
+
   posts.forEach((post) => {
     allImage.forEach((image) => {
-      if(image.id == post.imageId){
+      if (image.id == post.imageId) {
         post['image'] = image
       }
     })
@@ -24,11 +31,12 @@ Route.group(() => {
   Route.get('/users', 'AuthController.list').as('auth.list')
   Route.get('/users/:id/edit', 'AuthController.edit').as('auth.edit')
   Route.post('/users/:id/edit', 'AuthController.update').as('auth.update')
-  Route.get('/post/create', 'PostsController.create').as('post.create')
-  Route.post('/post/create', 'PostsController.store').as('post.store')
+  Route.get('/post/:id/create', 'PostsController.create').as('post.create')
+  Route.post('/post/:id/create', 'PostsController.store').as('post.store')
 }).middleware('auth')
 
 Route.get('/images', 'ImagesController.index').as('image.index')
+Route.post('/images', 'ImagesController.search').as('image.search')
 
 
 Route.get('/register', 'AuthController.register').as('auth.register')

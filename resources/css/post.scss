@@ -5,4 +5,9 @@ form {
         background-color: white;
         min-height: 100px;
     }
+    .form-img {
+        img {
+            max-height: 300px;
+        }
+    }
 }

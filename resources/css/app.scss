@@ -3,7 +3,8 @@
 @import '~bootstrap/scss/mixins';
 
 $starorange: #df711b;
-$background: #f2f1eb;
+$background: #fff;
+$black: #030303;
 
 $custom-theme-colors: (
   "starorange": $starorange,
@@ -20,7 +21,7 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
 @import '~bootstrap-icons/font/bootstrap-icons.css';
 
 body {
-  font-family: 'Merriweather', serif;
+  font-family: 'Montserrat', serif;
 }
 
 .form-control:focus {
@@ -34,41 +35,47 @@ body {
   bottom: 3%;
   left: 3%;
   padding: 10px;
-  border: 1px solid #bcbebf;
+  border: 1px solid #1e1f22;
   border-radius: 5px;
-  color: #141619;
-  background-color: #d3d3d4;
+  color: #fff;
+  background-color: #1e1f22;
   a:hover {
     cursor: pointer;
   }
 }
 
-#carrousel{
-  height: 400px;
-  
-  img {
-    height: 400px;
-    object-fit: cover;
-    opacity: 90%;
-    background-color: #141619;
-  }
+.card {
+  transition: all 0.2s ease-in-out;
+}
 
-  h3{
-    font-family: 'Merriweather Sans', sans-serif;
-    font-weight: 300;
-  }
-
-  .carousel-control-next, .carousel-control-prev {
-    background-color: rgba(242, 241, 235, 0.6);
-  }
-
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transform: translateY(-5px);
+  cursor: pointer;
 }
 
 .card-img {
   img {
     object-fit: cover;
     height: 300px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
   }
+
+  border-radius: 20px;
+  border: 1px solid gray;
+}
+
+.card-text {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 300;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 1px solid gray;
 }
 
 ::-webkit-scrollbar {
@@ -86,4 +93,112 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(51, 51, 51);
+}
+
+#container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+}
+.timeline {
+  width: 80%;
+  height: auto;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.timeline ul {
+  padding: 0;
+  list-style: none;
+}
+.timeline ul li {
+  padding: 20px;
+  background-color: #ffffff;
+  border:1px solid gray;
+  color: black;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.timeline ul li:last-child {
+  margin-bottom: 0;
+}
+.timeline-content h1 {
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+.timeline-content p {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 300;
+}
+.timeline-content .date {
+  font-size: 12px;
+  font-weight: 300;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+@media only screen and (min-width: 768px) {
+  .timeline:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background-color: gray;
+  }
+  .timeline ul li {
+    width: 50%;
+    position: relative;
+    margin-bottom: 50px;
+    transition: all 0.3s ease-in-out;
+  }
+  .timeline ul li:hover {
+    background-color: rgb(177, 177, 177);
+    cursor: pointer;
+  }
+  .timeline ul li:nth-child(odd) {
+    float: left;
+    clear: right;
+    transform: translateX(-30px);
+    border-radius: 20px 0px 20px 20px;
+  }
+  .timeline ul li:nth-child(even) {
+    float: right;
+    clear: left;
+    transform: translateX(30px);
+    border-radius: 0px 20px 20px 20px;
+  }
+  .timeline ul li::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: gray;
+    transition: all 0.3s ease-in-out;
+    top: 0px;
+  }
+  .timeline ul li:nth-child(odd)::before {
+    transform: translate(50%, -50%);
+    right: -30px;
+  }
+  .timeline ul li:nth-child(even)::before {
+    transform: translate(-50%, -50%);
+    left: -30px;
+  }
+  .timeline-content .date {
+    position: absolute;
+    top: -30px;
+  }
+  .timeline ul li:hover::before {
+    background-color: rgb(17, 17, 17);
+  }
 }

@@ -1,3 +1,10 @@
 #grid {
     font-family: sans-serif;
 }
+
+.card {
+  border: 1px solid gray;
+  img {
+    border-radius: 0.25rem;
+  }
+}
