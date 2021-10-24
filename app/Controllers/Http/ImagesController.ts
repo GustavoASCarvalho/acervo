@@ -16,13 +16,18 @@ export default class ImagesController {
 
   public async search({ view, request }: HttpContextContract) {
     const data = request.only(['search'])
-    var images
-    if (data.search) {
-      images = await Image.query().where('name', 'like', `%${data.search}%`)
-    } else {
-      images = await Image.query()
-    }
+    const allImages = await Image.query()
+    var images: any[] = []
 
+    if (!data.search) {
+      images = allImages
+    } else {
+      allImages.forEach(image => {
+        if (image.name?.toLocaleLowerCase().includes(data.search.toLocaleLowerCase())) {
+          images.push(image)
+        }
+      })
+    }
 
     return view.render('image/index', { images })
   }

@@ -36,9 +36,9 @@
   <p class="text-center">Confira as histórias por trás de cada documento</p>
   <div id="container">
     <div class="timeline">
-      <ul>
+      <ul id="post_list">
         @each(post in posts)
-          <li>
+          <li class="post_item">
             <div class="timeline-content">
               <h3 class="date">{{post.data}}</h3>
               <h1>{{post.title}}</h1>
@@ -50,7 +50,8 @@
     </div>
   </div>
   <div class="d-flex d-column justify-content-center mt-2 mb-5">
-    <button type="button" class="btn btn-dark rounded-pill">Mais</button>
+    <button type="button" class="btn btn-dark rounded-pill" id="btn-load" >Mais</button>
   </div>
 </section>
+@!component('components/footer')
 @endsection

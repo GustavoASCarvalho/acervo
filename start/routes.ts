@@ -8,7 +8,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 
 Route.get('/', async ({ view }) => {
   const images = await Image.query().limit(4).orderBy('created_at', 'desc')
-  const posts = await Post.query().limit(5).orderBy('created_at', 'desc')
+  const posts = await Post.query().orderBy('created_at', 'desc')
   const allImage = await Image.query()
   posts.forEach(post => {
     post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
