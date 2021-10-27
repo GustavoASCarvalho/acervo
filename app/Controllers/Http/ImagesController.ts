@@ -37,11 +37,18 @@ export default class ImagesController {
     const s3 = Drive.use('s3')
 
     var file = request.file('image')
-    var fileData = request.only(['name', 'description'])
+    var fileData = request.only(['name', 'font', 'year'])
+
+    console.log(fileData.year);
 
 
     if (!file || !user) {
-      return response.json({ 'error': 'error' })
+      session.flash('errors', { "success": `Erro ao enviar arquivo` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+    if (!this.validateImage(fileData, session)) {
+      return response.redirect().back()
     }
 
     const filePath = `${Date.now()}-${file?.clientName}`
@@ -57,7 +64,7 @@ export default class ImagesController {
       } else {
         await s3.put(filePath, data).then(async () => {
           const url = await s3.getUrl(filePath)
-          await user.related('images').create({ 'name': fileData.name, 'url': url })
+          await user.related('images').create({ 'name': fileData.name, 'url': url, 'font': fileData.font, 'year': fileData.year })
         })
       }
     })
@@ -76,5 +83,34 @@ export default class ImagesController {
   }
 
   public async destroy({ }: HttpContextContract) {
+  }
+
+  private validateImage(data, session): Boolean {
+    const errors = {}
+
+    if (!data.name) {
+      this.registerError(errors, 'name', 'Campo obrigatório')
+    }
+    if (data.year) {
+      if (data.year.length != 4 || data.year > new Date().getFullYear()) {
+        this.registerError(errors, 'year', `Ano inválido, O ano tem que conter 4 digitos e ser menor que ${new Date().getFullYear() + 1}`)
+      }
+    }
+
+    if (Object.entries(errors).length > 0) {
+      session.flash('errors', errors)
+      session.flashAll()
+
+      return false
+    }
+
+    return true
+  }
+
+  private registerError(errors, atribute, error) {
+    if (!errors[atribute]) {
+      errors[atribute] = []
+    }
+    errors[atribute].push(error)
   }
 }

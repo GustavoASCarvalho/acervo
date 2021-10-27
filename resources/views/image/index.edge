@@ -1,8 +1,8 @@
 @layout('layouts/main')
-@set('title', 'Acervo')
+@set('title', 'Galeria - Acervo Digital')
 
 @section('meta')
-  <meta name="description" content="Acervo Digital de Paranaguá, pagina inicial" />
+  <meta name="description" content="Acervo Digital de Paranaguá, galeria de documentos" />
   @entryPointScripts('nav')
   @entryPointStyles('nav')
   @entryPointScripts('image')
@@ -23,16 +23,18 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5" id="grid">
       @each(image in images)
         <div class="col">
-          <div class="card card-hover">
+          <div class="card card-hover m-2">
             <img src="{{image.url}}" alt="{{image.name}}">
             <div class="card-body">
               <p class="card-text">{{image.name}}</p>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex flex-column align-items-center">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Ver publicações sobre</button>
+                <div class="btn-group-vertical" role="group" aria-label="Basic mixed styles example">
                   @if(auth.user?.isAdmin || auth.user?.isModerator)
-                    <a href="{{route('post.store', { id: image.id })}}"><button type="button" class="btn btn-sm btn-outline-success mt-1">Criar nova publicação</button></a>
-                  @endif                  
+                  <a href="{{route('post.store', { id: image.id })}}" style="width: 100%;"><button type="button" class="btn btn-sm btn-outline-success mt-1" style="width: 100%;">Criar nova publicação</button></a>
+                  @if(auth.user?.isModerator && auth.user?.id == image.userId || auth.user?.isAdmin)
+                    <a href="{{route('image.edit', { id: image.id })}}" style="width: 100%;"><button type="button" class="btn btn-sm btn-outline-warning mt-1" style="width: 100%;">Editar imagem</button></a>
+                  @endif
+                @endif 
                 </div>
                 <small class="text-muted">~{{image.year || 'sem data'}}</small>
               </div>

@@ -33,6 +33,8 @@ Route.group(() => {
   Route.post('/users/:id/edit', 'AuthController.update').as('auth.update')
   Route.get('/post/:id/create', 'PostsController.create').as('post.create')
   Route.post('/post/:id/create', 'PostsController.store').as('post.store')
+
+  Route.get('/image/:id/edit', 'ImagesController.edit').as('image.edit')
 }).middleware('auth')
 
 Route.get('/images', 'ImagesController.index').as('image.index')

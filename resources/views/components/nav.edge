@@ -23,7 +23,7 @@
                 Administrar
               </a>
               <ul class="dropdown-menu p-0 m-0" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Acervo</a></li>
+                <li><a class="dropdown-item" href="{{route('image.index')}}">Acervo</a></li>
                 <li><a class="dropdown-item" href="#">Postagens</a></li>
                 <li><a class="dropdown-item" href="{{route('image.create')}}">Adicionar imagem</a></li>
                 @if(auth.user.isAdmin)

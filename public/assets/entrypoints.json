@@ -2,42 +2,42 @@
   "entrypoints": {
     "app": {
       "css": [
-        "/assets/app.c2b30a4d.css"
+        "http://localhost:8080/assets/app.css"
       ],
       "js": [
-        "/assets/app.dddddea8.js"
+        "http://localhost:8080/assets/app.js"
       ]
     },
     "nav": {
       "css": [
-        "/assets/nav.e2962da3.css"
+        "http://localhost:8080/assets/nav.css"
       ],
       "js": [
-        "/assets/nav.d710d5f3.js"
+        "http://localhost:8080/assets/nav.js"
       ]
     },
     "image": {
       "css": [
-        "/assets/image.16142d9b.css"
+        "http://localhost:8080/assets/image.css"
       ],
       "js": [
-        "/assets/image.6b18b0c9.js"
+        "http://localhost:8080/assets/image.js"
       ]
     },
     "auth": {
       "css": [
-        "/assets/auth.ecd7454c.css"
+        "http://localhost:8080/assets/auth.css"
       ],
       "js": [
-        "/assets/auth.830b6ca6.js"
+        "http://localhost:8080/assets/auth.js"
       ]
     },
     "post": {
       "css": [
-        "/assets/post.3201cad4.css"
+        "http://localhost:8080/assets/post.css"
       ],
       "js": [
-        "/assets/post.31d6cfe0.js"
+        "http://localhost:8080/assets/post.js"
       ]
     }
   }

@@ -5,6 +5,36 @@
 .card {
   border: 1px solid gray;
   img {
-    border-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+  }
+}
+
+form {
+  #drop-file {
+    width: 100%;
+    height: 300px;
+    border: 1px dashed #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    text-align: center;
+    &:hover {
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    .bi {
+      font-size: 50px;
+    }
+    .drop-file-image-upload {
+      display: none;
+      img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+      }
+    }
   }
 }

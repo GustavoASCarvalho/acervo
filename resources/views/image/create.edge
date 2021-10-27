@@ -1,18 +1,118 @@
 @layout('layouts/main')
-@set('title', 'Home page')
+@set('title', 'Cadastro de Documento - Acervo Digital')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, cadastrar novo documento" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+  @entryPointScripts('image')
+  @entryPointStyles('image')
+@endsection
 
 @section('content')
+@!component('components/nav')
 <form action="{{route('image.store')}}" method="POST" class="p-3" enctype="multipart/form-data">
   {{ csrfField() }}
-  <div class="input-group mb-3">
-    <input type="file" class="form-control" placeholder="image" aria-label="image" name="image">
+  <input type="file" name="image" hidden>
+  <div id="drop-file" class="mb-3">
+    <div class="drop-file-text">
+      <p>Arraste o arquivo para cá</p>
+      <p>ou</p>
+      <p>Clique aqui para selecionar um arquivo</p>
+      <p><i class="bi bi-upload"></i></p>
+    </div>
+    <div class="drop-file-image-upload">
+    </div>
   </div>
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="name" aria-label="name" name="name">
+  <div class="form-floating my-3">
+    <input type="text" class="form-control" name="name" id="name" placeholder="Nome" autofocus value="{{flashMessages.get('name') || ''}}">
+    <label for="name">Nome</label>
+    @if(flashMessages.get('errors.name'))
+    <div class="invalid-feedback d-block">
+      {{flashMessages.get('errors.name')}}
+    </div>
+    @else
+      <div class="form-text">
+        Campo obrigatório
+      </div>
+    @endif
   </div>
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="description" aria-label="description" name="description">
+  <div class="form-floating my-3">
+    <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{flashMessages.get('font') || ''}}">
+    <label for="font">Fonte</label>
+    @if(flashMessages.get('errors.font'))
+    <div class="invalid-feedback d-block">
+      {{flashMessages.get('errors.font')}}
+    </div>
+    @else
+      <div class="form-text">
+        Não obrigatório
+      </div>
+    @endif
   </div>
+  <div class="form-floating my-3">
+    <input type="text" class="form-control" name="year" id="nameRegister" placeholder="Ano" value="{{flashMessages.get('year') || ''}}">
+    <label for="year">Ano</label>
+    @if(flashMessages.get('errors.year'))
+    <div class="invalid-feedback d-block">
+      {{flashMessages.get('errors.year')}}
+    </div>
+    @else
+      <div class="form-text">
+        Não obrigatório
+      </div>
+    @endif
+  </div>  
   <button type="submit" class="btn btn-success">Enviar</button>
 </form>
+
+<script>
+  const dropZone = document.querySelector('#drop-file')
+  const dropFile = document.querySelector('.drop-file-image-upload')
+  const dropText = document.querySelector('.drop-file-text')
+  const input = document.querySelector('input[type=file]')
+  var uploadedFile
+ 
+  if (dropZone && dropFile && dropText && input) {
+    dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    e.dataTransfer.dropEffect = 'copy'
+    })
+
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault()
+      e.stopPropagation()
+      uploadedFile = e.dataTransfer.files[0]
+
+      if (uploadedFile.type.match('image.*')) {
+        input.files = e.dataTransfer.files
+        dropFile.innerHTML = `<img src="${URL.createObjectURL(uploadedFile)}" class="p-1" alt="${uploadedFile.name}">
+        <p>${uploadedFile.name}</p>`
+        dropText.style.display = 'none'
+        dropFile.style.display = 'block'
+        console.log(uploadedFile);
+      } else {
+        alert('Arquivo não suportado')
+      }
+    })
+
+    dropZone.addEventListener('click', function(e) {
+      input.click()
+    })
+
+    input.addEventListener('change', function(e) {
+      uploadedFile = e.target.files[0]
+
+      if (uploadedFile.type.match('image.*')) {
+        dropFile.innerHTML = `<img src="${URL.createObjectURL(uploadedFile)}" class="p-1" alt="${uploadedFile.name}">
+        <p>${uploadedFile.name}</p>`
+        dropText.style.display = 'none'
+        dropFile.style.display = 'block'
+      } else {
+        alert('Arquivo não suportado')
+      }
+    })
+  }
+</script>
 @endsection
