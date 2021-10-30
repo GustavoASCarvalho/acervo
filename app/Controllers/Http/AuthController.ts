@@ -61,7 +61,6 @@ export default class AuthController {
     if (user) {
       return 'error'
     }
-
     return view.render('auth/login')
   }
 
