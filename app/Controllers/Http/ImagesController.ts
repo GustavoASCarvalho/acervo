@@ -3,10 +3,15 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import Application from '@ioc:Adonis/Core/Application'
 import fs from 'fs'
 import Image from 'App/Models/Image'
+import Post from 'App/Models/Post'
+import User from 'App/Models/User'
+
+import { format } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 
 export default class ImagesController {
   public async index({ view }: HttpContextContract) {
-    const images = await Image.query()
+    const images = await Image.query().where('isDeleted', false)
     return view.render('image/index', { images })
   }
 
@@ -16,7 +21,7 @@ export default class ImagesController {
 
   public async search({ view, request }: HttpContextContract) {
     const data = request.only(['search'])
-    const allImages = await Image.query()
+    const allImages = await Image.query().where('isDeleted', false)
     var images: any[] = []
 
     if (!data.search) {
@@ -73,16 +78,82 @@ export default class ImagesController {
     return response.redirect().toRoute('image.create')
   }
 
-  public async show({ }: HttpContextContract) {
+  public async show({ view, params, response, session }: HttpContextContract) {
+    const image = await Image.query().where('id', params.id).firstOrFail()
+
+    if (image.isDeleted) {
+      session.flash('errors', { "success": `Aceeso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
+    const post = await Post.query().where('image_id', params.id).where('is_deleted', false).orderBy('created_at', 'desc').first()
+    const posts = await Post.query().orderBy('created_at', 'desc').where('is_deleted', false)
+    const user = await User.query().where('id', image.userId).firstOrFail()
+
+    posts.forEach(post => {
+      post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
+    })
+
+    return view.render('image/show', { image, posts, post, user })
   }
 
-  public async edit({ }: HttpContextContract) {
+  public async edit({ view, params, auth, response, session }: HttpContextContract) {
+    const image = await Image.query().where('id', params.id).firstOrFail()
+    const user = await auth.user
+
+    if (user?.isAdmin || user?.id === image.userId) {
+      return view.render('image/edit', { image })
+    } else {
+      session.flash('errors', { "success": `Aceeso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
   }
 
-  public async update({ }: HttpContextContract) {
+  public async update({ request, params, response, session, auth }: HttpContextContract) {
+    const data = request.only(['name', 'font', 'year'])
+    const user = await auth.user
+    const image = await Image.query().where('id', params.id).firstOrFail()
+
+    if (!user?.isAdmin && user?.id !== image.userId) {
+      session.flash('errors', { "success": `Aceeso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
+    if (!this.validateImage(data, session)) {
+      return response.redirect().back()
+    }
+
+    image.name = data.name
+    image.font = data.font
+    image.year = data.year
+
+    await image.save()
+
+    session.flash('errors', { "success": `Documento atualizado` })
+    session.flashAll()
+
+    return response.redirect().toRoute('image.index')
   }
 
-  public async destroy({ }: HttpContextContract) {
+  public async delete({ params, session, response, auth }: HttpContextContract) {
+    const user = await auth.user
+
+    if (!user?.isAdmin || user?.id !== params.id) {
+      session.flash('errors', { "success": `Aceeso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
+    const image = await Image.query().where('id', params.id).firstOrFail()
+    image.isDeleted = true
+    await image.save()
+
+    session.flash('errors', { "success": `Imagem excluida com sucesso` })
+    session.flashAll()
+    return response.redirect().toRoute('image.index')
   }
 
   private validateImage(data, session): Boolean {

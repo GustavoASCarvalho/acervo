@@ -1,9 +1,9 @@
 import '../css/auth.scss'
 
 try {
-    const tbody = document.querySelector('tbody')
-    const tr = document.querySelectorAll('tr')
-    const input = document.querySelector('#data')
+    const tbody = document.querySelector('#tbody-user')
+    const tr = document.querySelectorAll('.tr-user')
+    const input = document.querySelector('#data-user')
 
     input.addEventListener('keyup', (e) => {
         if (input.value.length > 3) {

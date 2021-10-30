@@ -16,9 +16,9 @@ const databaseConfig: DatabaseConfig = {
         user: databaseUrl.username as string,
         password: databaseUrl.password as string,
         database: databaseUrl.pathname.substr(1) as string,
-        // ssl: {
-        //   rejectUnauthorized: false,
-        // },
+        ssl: {
+          rejectUnauthorized: false,
+        },
       },
       migrations: {
         naturalSort: true,

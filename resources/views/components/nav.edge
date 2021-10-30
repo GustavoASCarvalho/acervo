@@ -24,11 +24,11 @@
               </a>
               <ul class="dropdown-menu p-0 m-0" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="{{route('image.index')}}">Acervo</a></li>
-                <li><a class="dropdown-item" href="#">Postagens</a></li>
-                <li><a class="dropdown-item" href="{{route('image.create')}}">Adicionar imagem</a></li>
+                <li><a class="dropdown-item" href="{{route('post.list')}}">Postagens</a></li>
                 @if(auth.user.isAdmin)
                 <li><a class="dropdown-item" href="{{route('auth.list')}}">Usuarios</a></li>
                 @endif
+                <li><a class="dropdown-item" href="{{route('image.create')}}">Adicionar imagem</a></li>
               </ul>
             </li>
           @endif

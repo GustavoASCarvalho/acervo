@@ -1,0 +1,50 @@
+@layout('layouts/main')
+@set('title', 'Pagina Inicial - Acervo Digital')
+
+@section('meta')
+    <meta name="description" content="Acervo Digital de Paranaguá, tela de documento, {{image.name}}, {{image.description}}" />
+    @entryPointScripts('nav')
+    @entryPointStyles('nav')
+    @entryPointScripts('image')
+    @entryPointStyles('image')
+@endsection
+
+@section('content')
+@!component('components/nav')
+<section class="bg-dark">
+    <p class="text-center text-light py-2">{{image.name}}</p>
+</section>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12 col-md-7 d-flex flex-row align-items-start justify-content-center">
+            <div class="d-flex flex-column">
+                <a href="{{image.url}}" download="{{image.name}}" target="_blank"><img src="{{image.url}}" alt="{{image.name}}" class="img-fluid"></a>
+                <span class="fs-6"><b>Fonte:</b> {{image.font || 'sem fonte'}}</span>
+                <span><b>Ano da foto:</b> {{image.year}}</span>
+                @if(post)
+                    <span><b>Ultima publicação:</b> <a href="{{route('post.show', { id: post.id })}}" class="link-dark">{{post.title}}</a></span>
+                @else
+                    <span>Sem publicações recentes</span>
+                @endif
+            </div>
+        </div>
+        <div class="col-12 col-md-5 d-flex flex-column" id="ultimas-publicacoes">
+            <h3 class="mt-5 mt-md-0 text-center">Ultimas Publicações</h3>
+            @each(lastPost in posts)
+                <div class="card w-100 my-2">
+                    <div class="card-body w-100">
+                        <h5 class="card-title">{{lastPost.title}}</h5>
+                        <p class="card-text">{{lastPost.data}}</p>
+                        <div>
+                            <a href="{{route('post.show', { id: lastPost.id })}}" class="btn btn-dark">Ver</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            @endeach
+        </div>
+    </div>
+</div>
+
+@!component('components/footer')
+@endsection

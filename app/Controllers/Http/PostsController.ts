@@ -1,18 +1,36 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Image from 'App/Models/Image';
 import Post from 'App/Models/Post';
+import User from 'App/Models/User';
+
+import { format } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 
 export default class PostsController {
-  public async index({ }: HttpContextContract) {
-  }
 
-  public async create({ view, params }: HttpContextContract) {
+  public async create({ view, params, auth, session, response }: HttpContextContract) {
+
+    const user = await auth.user
+
+    if (!user) {
+      session.flash('errors', { "success": `Acesso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
     const image = await Image.query().where({ id: params.id }).firstOrFail()
     return view.render('post/create', { image })
   }
 
   public async store({ request, response, auth, session, params }: HttpContextContract) {
     const user = auth.user
+
+    if (!user) {
+      session.flash('errors', { "success": `Acesso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
     const data = request.only(['text', 'title'])
 
     if (!this.validateCreatePost(data, session)) {
@@ -22,6 +40,61 @@ export default class PostsController {
     session.flash('errors', { "success": "Postagem concluida" })
     session.flashAll()
     response.redirect().toRoute('/')
+  }
+
+  public async list({ view, auth, session, response }: HttpContextContract) {
+    const user = await auth.user
+    const users = await User.query()
+
+    var posts
+
+    if (!user) {
+      session.flash('errors', { "success": `Acesso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
+    if (user.isAdmin) {
+      posts = await Post.query().orderBy('created_at', 'desc')
+    } else if (user.isModerator) {
+      posts = await Post.query().where('userId', user.id).orderBy('created_at', 'desc')
+    }
+
+    posts.forEach(post => {
+      post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
+      posts.forEach((post) => {
+        users.forEach((user) => {
+          if (post.userId == user.id) {
+            post['author'] = user.name
+          }
+        })
+      })
+    })
+
+    return view.render('post/list', { posts })
+  }
+
+  public async update({ request, params, session, response, auth }: HttpContextContract) {
+    const data = request.only(['title', 'description'])
+
+    const post = await Post.query().where('id', params.id).firstOrFail()
+
+    post.title = data.title
+    post.description = data.description
+
+    await post.save()
+
+    session.flash('errors', { "success": `Post atualizado` })
+    session.flashAll()
+
+    return response.redirect().toRoute('post.list')
+  }
+
+  public async edit({ params, view }: HttpContextContract) {
+    const post = await Post.query().where('id', params.id).firstOrFail()
+    const image = await Image.query().where({ id: post.imageId }).firstOrFail()
+
+    return view.render('post/edit', { post, image })
   }
 
   private validateCreatePost(data, session): Boolean {

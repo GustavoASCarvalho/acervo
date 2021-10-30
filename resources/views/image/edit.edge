@@ -1,0 +1,63 @@
+@layout('layouts/main')
+@set('title', 'Cadastro de Documento - Acervo Digital')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, cadastrar novo documento" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+  @entryPointScripts('image')
+  @entryPointStyles('image')
+@endsection
+
+@section('content')
+@!component('components/nav')
+<div class="container">
+    <form action="{{route('image.update', {id: image.id})}}" method="POST" class="p-3">
+        {{ csrfField() }}
+        <div class="d-flex align-items-center justify-content-center">
+            <img src="{{image.url}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
+        </div>
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="name" id="name" placeholder="Nome" autofocus value="{{flashMessages.get('name') || image.name }}">
+          <label for="name">Nome</label>
+          @if(flashMessages.get('errors.name'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.name')}}
+          </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
+        </div>
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{flashMessages.get('font') || image.font }}">
+          <label for="font">Fonte</label>
+          @if(flashMessages.get('errors.font'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.font')}}
+          </div>
+          @else
+            <div class="form-text">
+              Não obrigatório
+            </div>
+          @endif
+        </div>
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="year" id="nameRegister" placeholder="Ano" value="{{flashMessages.get('year') || image.year }}">
+          <label for="year">Ano</label>
+          @if(flashMessages.get('errors.year'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.year')}}
+          </div>
+          @else
+            <div class="form-text">
+              Não obrigatório
+            </div>
+          @endif
+        </div>  
+        <button type="submit" class="btn btn-dark">Atualizar</button>
+        <a href="{{route('image.delete', {id: image.id})}}"><button type="button" class="btn btn-danger">Excluir</button></a>
+    </form>  
+</div>
+@endsection

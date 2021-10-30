@@ -24,7 +24,13 @@ try {
         throw new Error('Element not found')
     }
 
-    var aux = 3
+    var aux
+    if (li.length > 3) {
+        aux = 3
+    } else {
+        aux = li.length
+    }
+
     function showPosts() {
         ul.innerHTML = ''
         for (let i = 0; i < aux; i++) {

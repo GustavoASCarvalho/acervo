@@ -1,5 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Drive from '@ioc:Adonis/Core/Drive'
 import User from 'App/Models/User'
+import Application from '@ioc:Adonis/Core/Application'
+import fs from 'fs'
 
 export default class AuthController {
 
@@ -17,7 +20,7 @@ export default class AuthController {
   public async register({ view, auth }: HttpContextContract) {
     const user = await auth.user
 
-    if(user) {
+    if (user) {
       return 'error'
     }
 
@@ -28,7 +31,7 @@ export default class AuthController {
 
     const user = await auth.user
 
-    if(user){
+    if (user) {
       return 'error'
     }
 
@@ -40,14 +43,14 @@ export default class AuthController {
     }
 
     try {
-      const user = await User.create({ name: data.name, email: data.email, password: data.password, profileImg: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'})
+      const user = await User.create({ name: data.name, email: data.email, password: data.password, profileImg: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' })
       await auth.login(user, true)
     } catch (error) {
-      session.flash('errors', {"headRegister": "Impossivel criar usuario", "register": "display-block"})
+      session.flash('errors', { "headRegister": "Impossivel criar usuario", "register": "display-block" })
       session.flashAll()
       return response.redirect().back()
     }
-    session.flash('errors', {"success": "Conta criada com sucesso"})
+    session.flash('errors', { "success": "Conta criada com sucesso" })
     session.flashAll()
     return response.redirect().toRoute('/')
   }
@@ -55,7 +58,7 @@ export default class AuthController {
   public async login({ view, auth }: HttpContextContract) {
     const user = await auth.user
 
-    if(user) {
+    if (user) {
       return 'error'
     }
 
@@ -70,38 +73,48 @@ export default class AuthController {
     }
 
     try {
-      await auth.attempt(data.email, data.password)  
+      await auth.attempt(data.email, data.password)
       if (auth.user?.isDeleted) {
-        session.flash('errors', {"headLogin": "Usuario e/ou senha invalidos", "login": "display-block"})
+        session.flash('errors', { "headLogin": "Usuario e/ou senha invalidos", "login": "display-block" })
         session.flashAll()
         await auth.logout()
-        return response.redirect().back()  
+        return response.redirect().back()
       }
     } catch (error) {
-      session.flash('errors', {"headLogin": "Usuario e/ou senha invalidos", "login": "display-block"})
+      session.flash('errors', { "headLogin": "Usuario e/ou senha invalidos", "login": "display-block" })
       session.flashAll()
-      return response.redirect().back()  
+      return response.redirect().back()
     }
     const user = await auth.user
-    session.flash('errors', {"success": `Bem-vindo, ${user?.name}!`})
+    session.flash('errors', { "success": `Bem-vindo, ${user?.name}!` })
     session.flashAll()
     return response.redirect().toRoute('/')
   }
 
   public async logout({ response, auth, session }: HttpContextContract) {
     await auth.logout()
-    session.flash('errors', {"success": `Usuario desconectado`})
+    session.flash('errors', { "success": `Usuario desconectado` })
     session.flashAll()
     response.redirect().toRoute('/')
   }
 
-  public async edit({ params, view }: HttpContextContract) {
+  public async edit({ params, view, auth }: HttpContextContract) {
+
+    if (!auth.user) {
+      return 'error'
+    }
+
     const user = await User.query().where('id', params.id).firstOrFail()
-    return view.render('auth/edit', {user})
+    return view.render('auth/edit', { user })
   }
 
-  public async update({ request, params, session, response }: HttpContextContract) {
-    const data = request.only(['name','email','admin','moderator','deleted'])
+  public async update({ request, params, session, response, auth }: HttpContextContract) {
+
+    if (!auth.user) {
+      return 'error'
+    }
+
+    const data = request.only(['name', 'email', 'admin', 'moderator', 'deleted'])
 
     const user = await User.query().where('id', params.id).firstOrFail()
 
@@ -110,13 +123,37 @@ export default class AuthController {
     user.isAdmin = data.admin || false
     user.isModerator = data.moderator || false
     user.isDeleted = data.deleted || false
+    var file = request.file('img')
 
-    await user.save()
-    
-    session.flash('errors', {"success": `Usuario atualizado`})
+    if (file) {
+      console.log('entrou');
+
+      const s3 = Drive.use('s3')
+      const filePath = `${Date.now()}-${file?.clientName}`
+
+      await file.move(Application.tmpPath('uploads'), {
+        name: filePath,
+        overwrite: true, // overwrite in case of conflict
+      })
+
+      await fs.readFile(`${Application.tmpPath('uploads')}/${filePath}`, async (error, data) => {
+        if (error) {
+          return response.json({ 'error': 'error on file upload' })
+        } else {
+          await s3.put(filePath, data).then(async () => {
+            user.profileImg = await s3.getUrl(filePath)
+            await user.save()
+          })
+        }
+      })
+    } else {
+      await user.save()
+    }
+
+    session.flash('errors', { "success": `Usuario atualizado` })
     session.flashAll()
-    
-    return response.redirect().back()
+
+    return response.redirect().toRoute('auth.list')
   }
 
   private validateStore(data, session, users): Boolean {
@@ -152,7 +189,7 @@ export default class AuthController {
       this.registerError(errors, 'password2', 'Campo obrigatório')
     } else if (data.password2 != data.password) {
       this.registerError(errors, 'password2', 'As senhas não conferem')
-    } 
+    }
 
     if (Object.entries(errors).length > 0) {
       this.registerError(errors, 'register', 'display-block')

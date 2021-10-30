@@ -11,60 +11,62 @@
 
 @section('content')
 @!component('components/nav')
-<form action="{{route('image.store')}}" method="POST" class="p-3" enctype="multipart/form-data">
-  {{ csrfField() }}
-  <input type="file" name="image" hidden>
-  <div id="drop-file" class="mb-3">
-    <div class="drop-file-text">
-      <p>Arraste o arquivo para cá</p>
-      <p>ou</p>
-      <p>Clique aqui para selecionar um arquivo</p>
-      <p><i class="bi bi-upload"></i></p>
-    </div>
-    <div class="drop-file-image-upload">
-    </div>
-  </div>
-  <div class="form-floating my-3">
-    <input type="text" class="form-control" name="name" id="name" placeholder="Nome" autofocus value="{{flashMessages.get('name') || ''}}">
-    <label for="name">Nome</label>
-    @if(flashMessages.get('errors.name'))
-    <div class="invalid-feedback d-block">
-      {{flashMessages.get('errors.name')}}
-    </div>
-    @else
-      <div class="form-text">
-        Campo obrigatório
+<div class="container">
+  <form action="{{route('image.store')}}" method="POST" class="p-3" enctype="multipart/form-data">
+    {{ csrfField() }}
+    <input type="file" name="image" hidden>
+    <div id="drop-file" class="mb-3">
+      <div class="drop-file-text">
+        <p>Arraste o arquivo para cá</p>
+        <p>ou</p>
+        <p>Clique aqui para selecionar um arquivo</p>
+        <p><i class="bi bi-upload"></i></p>
       </div>
-    @endif
-  </div>
-  <div class="form-floating my-3">
-    <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{flashMessages.get('font') || ''}}">
-    <label for="font">Fonte</label>
-    @if(flashMessages.get('errors.font'))
-    <div class="invalid-feedback d-block">
-      {{flashMessages.get('errors.font')}}
-    </div>
-    @else
-      <div class="form-text">
-        Não obrigatório
+      <div class="drop-file-image-upload">
       </div>
-    @endif
-  </div>
-  <div class="form-floating my-3">
-    <input type="text" class="form-control" name="year" id="nameRegister" placeholder="Ano" value="{{flashMessages.get('year') || ''}}">
-    <label for="year">Ano</label>
-    @if(flashMessages.get('errors.year'))
-    <div class="invalid-feedback d-block">
-      {{flashMessages.get('errors.year')}}
     </div>
-    @else
-      <div class="form-text">
-        Não obrigatório
+    <div class="form-floating my-3">
+      <input type="text" class="form-control" name="name" id="name" placeholder="Nome" autofocus value="{{flashMessages.get('name') || ''}}">
+      <label for="name">Nome</label>
+      @if(flashMessages.get('errors.name'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.name')}}
       </div>
-    @endif
-  </div>  
-  <button type="submit" class="btn btn-success">Enviar</button>
-</form>
+      @else
+        <div class="form-text">
+          Campo obrigatório
+        </div>
+      @endif
+    </div>
+    <div class="form-floating my-3">
+      <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{flashMessages.get('font') || ''}}">
+      <label for="font">Fonte</label>
+      @if(flashMessages.get('errors.font'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.font')}}
+      </div>
+      @else
+        <div class="form-text">
+          Não obrigatório
+        </div>
+      @endif
+    </div>
+    <div class="form-floating my-3">
+      <input type="text" class="form-control" name="year" id="nameRegister" placeholder="Ano" value="{{flashMessages.get('year') || ''}}">
+      <label for="year">Ano</label>
+      @if(flashMessages.get('errors.year'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.year')}}
+      </div>
+      @else
+        <div class="form-text">
+          Não obrigatório
+        </div>
+      @endif
+    </div>  
+    <button type="submit" class="btn btn-success">Enviar</button>
+  </form>
+</div>
 
 <script>
   const dropZone = document.querySelector('#drop-file')

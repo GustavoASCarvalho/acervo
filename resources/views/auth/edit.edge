@@ -15,11 +15,12 @@
   <div class="row">
     <div class="col"></div>
     <div class="col-8 p-5 my-5 border border-4">
-      <form action="{{route('auth.update', {id: user.id})}}" method="POST">
+      <form action="{{route('auth.update', {id: user.id})}}" method="POST" enctype="multipart/form-data">
         {{ csrfField() }}
         <div class="d-flex justify-content-center mb-3">
-          <img src="{{user.profileImg}}" alt="foto de perfil do {{user.name}}">
+          <img src="{{user.profileImg}}" alt="foto de perfil do {{user.name}}" id="profileImg">
         </div>
+        <input type="file" name="img" hidden>
         <div class="form-floating form-floating-sm mb-3">
           <input type="text" class="form-control " id="name" placeholder="João da Silva" value="{{user.name}}" name="name">
           <label for="name">Nome</label>
@@ -77,4 +78,23 @@
     <div class="col"></div>
   </div>
 </main>
+
+<script>
+  var img = document.querySelector('#profileImg')
+  var inputFile = document.querySelector('input[type=file]')
+  img.addEventListener('click', function() {
+    inputFile.click()
+  })
+
+  inputFile.addEventListener('change', function(e) {
+    var uploadedFile = e.target.files[0]
+
+    if (uploadedFile.type.match('image.*')) {
+      img.src = URL.createObjectURL(uploadedFile)
+    } else {
+      alert('Arquivo não suportado')
+    }
+  })
+</script>
+
 @endsection

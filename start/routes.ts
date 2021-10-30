@@ -8,7 +8,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 
 Route.get('/', async ({ view }) => {
   const images = await Image.query().limit(4).orderBy('created_at', 'desc')
-  const posts = await Post.query().orderBy('created_at', 'desc')
+  const posts = await Post.query().orderBy('created_at', 'desc').where('is_deleted', false)
   const allImage = await Image.query()
   posts.forEach(post => {
     post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
@@ -26,20 +26,28 @@ Route.get('/', async ({ view }) => {
 })
 
 Route.group(() => {
-  Route.get('/image/create', 'ImagesController.create').as('image.create')
-  Route.post('/image/create', 'ImagesController.store').as('image.store')
   Route.get('/users', 'AuthController.list').as('auth.list')
   Route.get('/users/:id/edit', 'AuthController.edit').as('auth.edit')
   Route.post('/users/:id/edit', 'AuthController.update').as('auth.update')
+
+  Route.get('/posts', 'PostsController.list').as('post.list')
+  Route.get('/posts/:id/edit', 'PostsController.edit').as('post.edit')
+  Route.post('/posts/:id/edit', 'PostsController.update').as('post.update')
   Route.get('/post/:id/create', 'PostsController.create').as('post.create')
   Route.post('/post/:id/create', 'PostsController.store').as('post.store')
+  Route.get('/post/:id/delete', 'PostsController.delete').as('post.delete')
+  Route.get('/post/:id/show', 'PostsController.show').as('post.show')
 
+  Route.get('/image/create', 'ImagesController.create').as('image.create')
+  Route.post('/image/create', 'ImagesController.store').as('image.store')
+  Route.post('/image/:id/update', 'ImagesController.update').as('image.update')
   Route.get('/image/:id/edit', 'ImagesController.edit').as('image.edit')
+  Route.get('/image/:id/delete', 'ImagesController.delete').as('image.delete')
 }).middleware('auth')
 
 Route.get('/images', 'ImagesController.index').as('image.index')
 Route.post('/images', 'ImagesController.search').as('image.search')
-
+Route.get('/image/:id/show', 'ImagesController.show').as('image.show')
 
 Route.get('/register', 'AuthController.register').as('auth.register')
 Route.get('/login', 'AuthController.login').as('auth.login')

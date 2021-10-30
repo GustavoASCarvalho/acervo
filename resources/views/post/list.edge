@@ -1,0 +1,59 @@
+@layout('layouts/main')
+@set('title', 'Lista de Usuarios - Acervo Digital')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, Lista de usuarios" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+@endsection
+
+@section('content')
+    @!component('components/nav')
+    <div class="container">
+        <div style="height: 20px"></div>
+        <div class="input-group input-group-lg my-4">
+            <input type="text" class="form-control" placeholder="Pesquisar pelo nome" aria-label="Recipient's username" aria-describedby="button-addon2" name="data" id="data-post">
+        </div>
+        <table class="table table-ligth">
+            <tbody id="tbody-post">
+                @each(post in posts)
+                    <tr class="tr-post">
+                        <td>{{post.title}}</td>
+                        <td>{{post.data}}</td>
+                        <td>Por: {{post.author}}</td>
+                        <td class="d-flex justify-content-end"><a class="btn btn-success align-self-end" href="{{route('post.edit', {id: post.id})}}">Editar <i class="bi bi-arrow-right"></i></a></td>
+                    </tr>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        try {
+            const tbody = document.querySelector('#tbody-post')
+            const tr = document.querySelectorAll('.tr-post')
+            const input = document.querySelector('#data-post')
+
+            input.addEventListener('keyup', (e) => {
+                if (input.value.length > 3) {
+                    tbody.innerHTML = ""
+                    tr.forEach((value) => {
+                        const name = value.children[0].textContent.toLowerCase()
+                        const email = value.children[1].textContent.toLowerCase()
+                        const data = input.value.toLowerCase()
+                        if (name.includes(data) || email.includes(data)) {
+                            tbody.innerHTML += value.innerHTML
+                        }
+                    })
+                } else {
+                    tbody.innerHTML = ""
+                    tr.forEach((value) => {
+                        tbody.innerHTML += value.innerHTML
+                    })
+                }
+            })
+        } catch {
+            console.log('Não foi possível carregar a lista de usuários')
+        }
+    </script>
+@endsection

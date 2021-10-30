@@ -2,7 +2,7 @@ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import User from 'App/Models/User'
 
 export default class AppSeeder extends BaseSeeder {
-  public async run () {
+  public async run() {
     await User.createMany([
       {
         email: 'admin@gmail.com',
@@ -21,23 +21,23 @@ export default class AppSeeder extends BaseSeeder {
     ])
 
     const user = await User.create({
-        email: 'gustavoalexandrescarvalho@gmail.com',
-        isAdmin: true,
-        name: 'Gustavo Alexandre',
-        password: '12345678',
-        profileImg: 'https://conteudo.imguol.com.br/c/entretenimento/d5/2020/10/07/homem-com-vergonha-1602098705397_v2_450x450.jpg',
+      email: 'gustavoalexandrescarvalho@gmail.com',
+      isAdmin: true,
+      name: 'Gustavo Alexandre',
+      password: '12345678',
+      profileImg: 'https://conteudo.imguol.com.br/c/entretenimento/d5/2020/10/07/homem-com-vergonha-1602098705397_v2_450x450.jpg',
     })
 
     await user.related('images').createMany([
       {
         font: 'José Gonçalves',
-        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/241535322_4076352785797995_5805993625528863302_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=973b4a&_nc_ohc=Cc5e8q2VARoAX_MuMWG&_nc_ht=scontent.fjoi9-1.fna&oh=f2ee7e913ce7f43ed5c4026d871144a9&oe=61944F1C',
+        url: 'https://acervoparanagua.s3.sa-east-1.amazonaws.com/1635514163777-depositphotos_93376372-stock-photo-sunset-over-sea-pier.jpg',
         name: '150 anos da independencia do brasil - Coral',
         year: 1972,
       },
       {
         font: 'Gonçalves Dias',
-        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/240602037_4066202943479646_1071727867294061609_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=973b4a&_nc_ohc=l-bvy0pEW_4AX-GTC96&_nc_ht=scontent.fjoi9-1.fna&oh=120ff72542acfa5ec9d4a0e8c549c4f3&oe=61943CC1',
+        url: 'https://acervoparanagua.s3.sa-east-1.amazonaws.com/1635514163777-depositphotos_93376372-stock-photo-sunset-over-sea-pier.jpg',
         name: 'eusébio de queirós',
         year: 1850,
       },
@@ -63,17 +63,17 @@ export default class AppSeeder extends BaseSeeder {
 
     await user.related('posts').createMany([
       {
-      description: 'D. Pedro II, por Graça de Deus, e Unanime Acclamação dos Povos, Imperador Constitucional e Defensor Perpetuo do Brasil. Fazemos saber a todos os Nossos subditos, que a Assembléa Geral Decretou, e Nós Queremos a Lei seguinte Art. 1º As Forças Navaes em .',
-      imageId: 1,
-      title: 'A volta de D. Pedro II',      
+        description: 'D. Pedro II, por Graça de Deus, e Unanime Acclamação dos Povos, Imperador Constitucional e Defensor Perpetuo do Brasil. Fazemos saber a todos os Nossos subditos, que a Assembléa Geral Decretou, e Nós Queremos a Lei seguinte Art. 1º As Forças Navaes em .',
+        imageId: 1,
+        title: 'A volta de D. Pedro II',
       },
       {
         description: 'Paranaguá ocupou uma posição, tinha um status, por causa da fábrica de pólvora e do Porto, que era a "internet" da época. O Zé Maria havia comentado que nas obras na sua casa, encontrou pedaços de pedra, que eram possivelmente da fábrica de pólvora. Quem sabe a família do Azuil, Azuiléia tenham mais elementos. Essa foto merece uma exposição e levantamento dos FATOS.',
         imageId: 2,
-        title: 'Paranaguá merece mais',      
+        title: 'Paranaguá merece mais',
       }
     ])
   }
 
-  
+
 }
