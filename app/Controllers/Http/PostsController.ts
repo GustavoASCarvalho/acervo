@@ -74,7 +74,7 @@ export default class PostsController {
     return view.render('post/list', { posts })
   }
 
-  public async update({ request, params, session, response, auth }: HttpContextContract) {
+  public async update({ request, params, session, response }: HttpContextContract) {
     const data = request.only(['title', 'description'])
 
     const post = await Post.query().where('id', params.id).firstOrFail()
