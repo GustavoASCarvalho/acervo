@@ -50,6 +50,7 @@ export default class AuthController {
       session.flashAll()
       return response.redirect().back()
     }
+    await auth.user?.related('logs').create({ type: 'usuario', message: `o usuario ${auth.user?.name} foi criado`, action: 'create' })
     session.flash('errors', { "success": "Conta criada com sucesso" })
     session.flashAll()
     return response.redirect().toRoute('/')
@@ -85,12 +86,14 @@ export default class AuthController {
       return response.redirect().back()
     }
     const user = await auth.user
+    await user?.related('logs').create({ type: 'usuario', message: `${user.name} logou`, action: 'login' })
     session.flash('errors', { "success": `Bem-vindo, ${user?.name}!` })
     session.flashAll()
     return response.redirect().toRoute('/')
   }
 
   public async logout({ response, auth, session }: HttpContextContract) {
+    await auth.user?.related('logs').create({ type: 'usuario', message: `${auth.user?.name} saiu`, action: 'logout' })
     await auth.logout()
     session.flash('errors', { "success": `Usuario desconectado` })
     session.flashAll()
@@ -149,6 +152,7 @@ export default class AuthController {
       await user.save()
     }
 
+    await auth.user?.related('logs').create({ type: 'usuario', message: `o usuario ${auth.user?.name} editou o usuario ${user.name}`, action: 'update' })
     session.flash('errors', { "success": `Usuario atualizado` })
     session.flashAll()
 

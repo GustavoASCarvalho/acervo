@@ -21,8 +21,12 @@
                 <a href="{{image.url}}" download="{{image.name}}" target="_blank"><img src="{{image.url}}" alt="{{image.name}}" class="img-fluid"></a>
                 <span class="fs-6"><b>Fonte:</b> {{image.font || 'sem fonte'}}</span>
                 <span><b>Ano da foto:</b> {{image.year}}</span>
-                @if(post)
-                    <span><b>Ultima publicação:</b> <a href="{{route('post.show', { id: post.id })}}" class="link-dark">{{post.title}}</a></span>
+                @if(imagePosts.length > 0)
+                    <span><b>Postagens:</b>
+                        @each(post in imagePosts)
+                            <a href="{{route('post.show', { id: post.id })}}" target="_blank">{{post.title}}</a>
+                        @endeach
+                    </span>
                 @else
                     <span>Sem publicações recentes</span>
                 @endif

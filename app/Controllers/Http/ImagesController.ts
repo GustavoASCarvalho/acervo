@@ -69,10 +69,12 @@ export default class ImagesController {
       } else {
         await s3.put(filePath, data).then(async () => {
           const url = await s3.getUrl(filePath)
-          await user.related('images').create({ 'name': fileData.name, 'url': url, 'font': fileData.font, 'year': fileData.year })
+          const img = await user.related('images').create({ 'name': fileData.name, 'url': url, 'font': fileData.font, 'year': fileData.year })
+          await user.related('logs').create({ type: 'image', action: 'create', message: `${user.name} criou uma imagem`, 'imageId': img.id })
         })
       }
     })
+
     session.flash('errors', { "success": `Imagem cadastrada com sucesso` })
     session.flashAll()
     return response.redirect().toRoute('image.create')
@@ -87,15 +89,19 @@ export default class ImagesController {
       return response.redirect().back()
     }
 
-    const post = await Post.query().where('image_id', params.id).where('is_deleted', false).orderBy('created_at', 'desc').first()
-    const posts = await Post.query().orderBy('created_at', 'desc').where('is_deleted', false)
+    const imagePosts = await Post.query().where('image_id', params.id).where('is_deleted', false).orderBy('created_at', 'desc').limit(5)
+    const posts = await Post.query().orderBy('created_at', 'desc').where('is_deleted', false).limit(5)
     const user = await User.query().where('id', image.userId).firstOrFail()
 
     posts.forEach(post => {
       post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
     })
 
-    return view.render('image/show', { image, posts, post, user })
+    image.views += 1
+
+    await image.save()
+
+    return view.render('image/show', { image, posts, imagePosts, user })
   }
 
   public async edit({ view, params, auth, response, session }: HttpContextContract) {
@@ -132,6 +138,7 @@ export default class ImagesController {
 
     await image.save()
 
+    await user.related('logs').create({ type: 'image', action: 'update', message: `${user.name} atualizou uma imagem`, imageId: image.id })
     session.flash('errors', { "success": `Documento atualizado` })
     session.flashAll()
 
@@ -151,6 +158,7 @@ export default class ImagesController {
     image.isDeleted = true
     await image.save()
 
+    await user.related('logs').create({ type: 'image', action: 'delete', message: `${user.name} excluiu uma imagem`, imageId: image.id })
     session.flash('errors', { "success": `Imagem excluida com sucesso` })
     session.flashAll()
     return response.redirect().toRoute('image.index')

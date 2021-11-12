@@ -15,6 +15,9 @@ export default class Post extends BaseModel {
   public title: string
 
   @column()
+  public views: number
+
+  @column()
   public description: string
 
   @column()

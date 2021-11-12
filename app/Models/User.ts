@@ -9,6 +9,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import Image from './Image'
 import Post from './Post'
+import Log from './Log'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -30,6 +31,9 @@ export default class User extends BaseModel {
   public rememberMeToken?: string
 
   @column()
+  public views: number
+
+  @column()
   public isAdmin?: boolean
 
   @column()
@@ -45,7 +49,7 @@ export default class User extends BaseModel {
   public updatedAt: DateTime
 
   @beforeSave()
-  public static async hashPassword (user: User) {
+  public static async hashPassword(user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
@@ -56,4 +60,7 @@ export default class User extends BaseModel {
 
   @hasMany(() => Post)
   public posts: HasMany<typeof Post>
+
+  @hasMany(() => Log)
+  public logs: HasMany<typeof Log>
 }

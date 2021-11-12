@@ -36,7 +36,10 @@ export default class PostsController {
     if (!this.validateCreatePost(data, session)) {
       return response.redirect().back()
     }
-    await Post.create({ 'imageId': params.id, 'userId': user?.id, 'title': data.title, 'description': data.text })
+    const post = await Post.create({ 'imageId': params.id, 'userId': user?.id, 'title': data.title, 'description': data.text })
+
+    await user?.related('logs').create({ type: 'post', action: 'create', message: `${user.name} criou um novo post`, postId: post.id })
+
     session.flash('errors', { "success": "Postagem concluida" })
     session.flashAll()
     response.redirect().toRoute('/')
@@ -74,7 +77,7 @@ export default class PostsController {
     return view.render('post/list', { posts })
   }
 
-  public async update({ request, params, session, response }: HttpContextContract) {
+  public async update({ request, params, session, response, auth }: HttpContextContract) {
     const data = request.only(['title', 'description'])
 
     const post = await Post.query().where('id', params.id).firstOrFail()
@@ -84,6 +87,9 @@ export default class PostsController {
 
     await post.save()
 
+    const user = await auth.user
+
+    await user?.related('logs').create({ type: 'post', action: 'update', message: `${user.name} atualizou um post`, postId: post.id })
     session.flash('errors', { "success": `Post atualizado` })
     session.flashAll()
 
