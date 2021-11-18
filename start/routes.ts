@@ -36,7 +36,6 @@ Route.group(() => {
   Route.get('/post/:id/create', 'PostsController.create').as('post.create')
   Route.post('/post/:id/create', 'PostsController.store').as('post.store')
   Route.get('/post/:id/delete', 'PostsController.delete').as('post.delete')
-  Route.get('/post/:id/show', 'PostsController.show').as('post.show')
 
   Route.get('/image/create', 'ImagesController.create').as('image.create')
   Route.post('/image/create', 'ImagesController.store').as('image.store')
@@ -48,6 +47,7 @@ Route.group(() => {
 Route.get('/images', 'ImagesController.index').as('image.index')
 Route.post('/images', 'ImagesController.search').as('image.search')
 Route.get('/image/:id/show', 'ImagesController.show').as('image.show')
+Route.get('/post/:id/show', 'PostsController.show').as('post.show')
 
 Route.get('/register', 'AuthController.register').as('auth.register')
 Route.get('/login', 'AuthController.login').as('auth.login')

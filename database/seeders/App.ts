@@ -31,13 +31,13 @@ export default class AppSeeder extends BaseSeeder {
     await user.related('images').createMany([
       {
         font: 'José Gonçalves',
-        url: 'https://acervoparanagua.s3.sa-east-1.amazonaws.com/1635514163777-depositphotos_93376372-stock-photo-sunset-over-sea-pier.jpg',
+        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/69019728_1984618944971400_3133589645032423424_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=cdbe9c&_nc_ohc=CaMb5k8RAzUAX9x80s9&_nc_ht=scontent.fjoi9-1.fna&oh=9679b75d7ba7d6819e518a11916751cf&oe=61BA1848',
         name: '150 anos da independencia do brasil - Coral',
         year: 1972,
       },
       {
         font: 'Gonçalves Dias',
-        url: 'https://acervoparanagua.s3.sa-east-1.amazonaws.com/1635514163777-depositphotos_93376372-stock-photo-sunset-over-sea-pier.jpg',
+        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/69307932_1984625261637435_1230887556304863232_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=cdbe9c&_nc_ohc=qlrTDUq4epYAX--EP7Y&_nc_ht=scontent.fjoi9-1.fna&oh=c947fb99891499af6ffbb770e84c0368&oe=61BB4657',
         name: 'eusébio de queirós',
         year: 1850,
       },

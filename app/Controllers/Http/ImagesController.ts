@@ -77,7 +77,7 @@ export default class ImagesController {
 
     session.flash('errors', { "success": `Imagem cadastrada com sucesso` })
     session.flashAll()
-    return response.redirect().toRoute('image.create')
+    return response.redirect().back()
   }
 
   public async show({ view, params, response, session }: HttpContextContract) {
@@ -122,46 +122,49 @@ export default class ImagesController {
     const user = await auth.user
     const image = await Image.query().where('id', params.id).firstOrFail()
 
-    if (!user?.isAdmin && user?.id !== image.userId) {
-      session.flash('errors', { "success": `Aceeso negado` })
+    console.log(user?.isAdmin);
+
+
+    if (user?.isAdmin || user?.id === image.userId) {
+      if (!this.validateImage(data, session)) {
+        return response.redirect().back()
+      }
+
+      image.name = data.name
+      image.font = data.font
+      image.year = data.year
+
+      await image.save()
+
+      await user.related('logs').create({ type: 'image', action: 'update', message: `${user.name} atualizou uma imagem`, imageId: image.id })
+      session.flash('errors', { "success": `Documento atualizado` })
+      session.flashAll()
+
+      return response.redirect().toRoute('image.index')
+    } else {
+      session.flash('errors', { "success": `Acesso negado` })
       session.flashAll()
       return response.redirect().back()
     }
-
-    if (!this.validateImage(data, session)) {
-      return response.redirect().back()
-    }
-
-    image.name = data.name
-    image.font = data.font
-    image.year = data.year
-
-    await image.save()
-
-    await user.related('logs').create({ type: 'image', action: 'update', message: `${user.name} atualizou uma imagem`, imageId: image.id })
-    session.flash('errors', { "success": `Documento atualizado` })
-    session.flashAll()
-
-    return response.redirect().toRoute('image.index')
   }
 
   public async delete({ params, session, response, auth }: HttpContextContract) {
     const user = await auth.user
 
-    if (!user?.isAdmin || user?.id !== params.id) {
+    if (user?.isAdmin || user?.id === params.id) {
+      const image = await Image.query().where('id', params.id).firstOrFail()
+      image.isDeleted = true
+      await image.save()
+
+      await user?.related('logs').create({ type: 'image', action: 'delete', message: `${user.name} excluiu uma imagem`, imageId: image.id })
+      session.flash('errors', { "success": `Imagem excluida com sucesso` })
+      session.flashAll()
+      return response.redirect().toRoute('image.index')
+    } else {
       session.flash('errors', { "success": `Aceeso negado` })
       session.flashAll()
       return response.redirect().back()
     }
-
-    const image = await Image.query().where('id', params.id).firstOrFail()
-    image.isDeleted = true
-    await image.save()
-
-    await user.related('logs').create({ type: 'image', action: 'delete', message: `${user.name} excluiu uma imagem`, imageId: image.id })
-    session.flash('errors', { "success": `Imagem excluida com sucesso` })
-    session.flashAll()
-    return response.redirect().toRoute('image.index')
   }
 
   private validateImage(data, session): Boolean {
