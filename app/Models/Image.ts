@@ -21,6 +21,12 @@ export default class Image extends BaseModel {
   public views: number
 
   @column()
+  public address?: string
+
+  @column()
+  public coordinates?: string
+
+  @column()
   public userId: number
 
   @column()

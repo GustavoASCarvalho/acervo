@@ -11,6 +11,8 @@ export default class Images extends BaseSchema {
       table.integer('year').nullable()
       table.string('font').nullable()
       table.integer('views').nullable().defaultTo(0)
+      table.string('address').nullable()
+      table.string('coordinates').nullable()
       table.integer('user_id').references('id').inTable('users').notNullable()
       table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at', { useTz: true })

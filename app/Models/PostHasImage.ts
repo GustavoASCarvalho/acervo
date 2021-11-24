@@ -1,27 +1,15 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class Log extends BaseModel {
+export default class PostHasImage extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public userId: number
+  public post_id: number
 
   @column()
-  public imageId?: number
-
-  @column()
-  public postId?: number
-
-  @column()
-  public type: string
-
-  @column()
-  public action: string
-
-  @column()
-  public message: string
+  public image_id: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
