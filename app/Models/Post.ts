@@ -9,9 +9,6 @@ export default class Post extends BaseModel {
   public userId: number
 
   @column()
-  public imageId: number
-
-  @column()
   public title: string
 
   @column()

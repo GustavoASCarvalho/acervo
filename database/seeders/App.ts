@@ -1,34 +1,29 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import PostHasImage from 'App/Models/PostHasImage'
+import Tag from 'App/Models/Tag'
 import User from 'App/Models/User'
+import UserImageHasTag from 'App/Models/UserImageHasTag'
 
 export default class AppSeeder extends BaseSeeder {
   public async run() {
-    await User.createMany([
+    const users = await User.createMany([
       {
-        email: 'admin@gmail.com',
+        email: 'gustavoalexandrescarvalho@gmail.com',
         isAdmin: true,
-        name: 'administrador',
+        name: 'Gustavo Alexandre',
         password: '12345678',
         profileImg: 'https://bestprofilepictures.com/wp-content/uploads/2021/04/Cool-Profile-Picture-986x1024.jpg',
       },
       {
-        email: 'moderador@gmail.com',
+        email: 'usuario@gmail.com',
         isModerator: true,
-        name: 'moderador',
+        name: 'Roberto Ramos',
         password: '12345678',
         profileImg: 'https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aW5zdGFncmFtJTIwcHJvZmlsZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
       }
     ])
 
-    const user = await User.create({
-      email: 'gustavoalexandrescarvalho@gmail.com',
-      isAdmin: true,
-      name: 'Gustavo Alexandre',
-      password: '12345678',
-      profileImg: 'https://conteudo.imguol.com.br/c/entretenimento/d5/2020/10/07/homem-com-vergonha-1602098705397_v2_450x450.jpg',
-    })
-
-    await user.related('images').createMany([
+    await users[0].related('images').createMany([
       {
         font: 'José Gonçalves',
         url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/69019728_1984618944971400_3133589645032423424_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=cdbe9c&_nc_ohc=CaMb5k8RAzUAX9x80s9&_nc_ht=scontent.fjoi9-1.fna&oh=9679b75d7ba7d6819e518a11916751cf&oe=61BA1848',
@@ -41,21 +36,59 @@ export default class AppSeeder extends BaseSeeder {
         name: 'eusébio de queirós',
         year: 1850,
       },
+      {
+        font: 'Ludovica',
+        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t39.30808-6/p180x540/259476769_4308397249260213_6931715775764804652_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=0debeb&_nc_ohc=xdoxCqL1auIAX-HxTGn&_nc_ht=scontent.fjoi9-1.fna&oh=fbd18cb199785240603598f8aa048d75&oe=61A2EBF2',
+        name: 'eusébio de queirós',
+        year: 1850,
+      },
     ])
 
-    await user.related('posts').createMany([
+
+    await users[1].related('posts').createMany([
       {
         description: 'D. Pedro II, por Graça de Deus, e Unanime Acclamação dos Povos, Imperador Constitucional e Defensor Perpetuo do Brasil. Fazemos saber a todos os Nossos subditos, que a Assembléa Geral Decretou, e Nós Queremos a Lei seguinte Art. 1º As Forças Navaes em .',
-        imageId: 1,
         title: 'A volta de D. Pedro II',
+        views: 10,
       },
       {
         description: 'Paranaguá ocupou uma posição, tinha um status, por causa da fábrica de pólvora e do Porto, que era a "internet" da época. O Zé Maria havia comentado que nas obras na sua casa, encontrou pedaços de pedra, que eram possivelmente da fábrica de pólvora. Quem sabe a família do Azuil, Azuiléia tenham mais elementos. Essa foto merece uma exposição e levantamento dos FATOS.',
-        imageId: 2,
         title: 'Paranaguá merece mais',
       }
     ])
+
+    await users[1].related('logs').createMany([
+      {
+        imageId: 1,
+        action: 'update',
+        type: 'image',
+        message: 'Usuário alterou a imagem',
+      }
+    ])
+
+    await Tag.createMany([
+      {
+        tag: 'história',
+      },
+      {
+        tag: 'Dom Pedro',
+      }
+    ])
+
+    await UserImageHasTag.create({
+      imageId: 1,
+      tagId: 1,
+    })
+
+    await PostHasImage.createMany([
+      {
+        postId: 1,
+        imageId: 1,
+      },
+      {
+        postId: 1,
+        imageId: 2,
+      }
+    ])
   }
-
-
 }
