@@ -6,10 +6,10 @@ export default class PostHasImage extends BaseModel {
   public id: number
 
   @column()
-  public post_id: number
+  public postId: number
 
   @column()
-  public image_id: number
+  public imageId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

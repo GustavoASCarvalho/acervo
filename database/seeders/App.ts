@@ -41,24 +41,6 @@ export default class AppSeeder extends BaseSeeder {
         name: 'eusébio de queirós',
         year: 1850,
       },
-      {
-        font: 'Renan',
-        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/240663845_4055302411236366_6121010034442026588_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=973b4a&_nc_ohc=pxmct65_isgAX90Dbyq&_nc_ht=scontent.fjoi9-1.fna&oh=4321ce1fd022cadc7d06ef4832448531&oe=61963A87',
-        name: 'Morre parnanguara',
-        year: 1940,
-      },
-      {
-        font: 'Samantha',
-        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/240706828_4054535751313032_7587016396876387896_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=973b4a&_nc_ohc=WR_PjaIP2qUAX9v8Fqw&_nc_ht=scontent.fjoi9-1.fna&oh=cbe9a5499cff87532f4139dd6bd53fec&oe=6195D812',
-        name: 'Diario do Commercio',
-        year: 1992,
-      },
-      {
-        font: 'Gabriela',
-        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/240411467_4027820420651232_13091553573406744_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=973b4a&_nc_ohc=ygRUaWvZFkMAX_SdreR&_nc_ht=scontent.fjoi9-1.fna&oh=59ffe72fe957f0ec408b75b4d365cbb4&oe=61975D79',
-        name: 'IVETE CECYN Rainha do Carnaval 1955',
-        year: 1955,
-      }
     ])
 
     await user.related('posts').createMany([
