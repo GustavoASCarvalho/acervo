@@ -15,16 +15,28 @@ export default class Image extends BaseModel {
   public font?: string
 
   @column()
+  public date?: DateTime
+
+  @column()
   public year?: number
 
   @column()
   public views: number
 
   @column()
-  public address?: string
+  public city?: string
 
   @column()
-  public coordinates?: string
+  public neighborhood?: string
+
+  @column()
+  public street?: string
+
+  @column()
+  public latitude?: string
+
+  @column()
+  public longitude?: string
 
   @column()
   public userId: number

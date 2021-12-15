@@ -7,6 +7,29 @@
   @entryPointStyles('nav')
   @entryPointScripts('image')
   @entryPointStyles('image')
+  <style>
+    .step {
+      display: flex;
+      align-items: center;
+    }
+
+    .step div {
+      height: 40px;
+      width: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 50%;
+      background-color: #333333;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .step p {
+      font-weight: bold;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -14,19 +37,44 @@
 <div class="container">
   <form action="{{route('image.store')}}" method="POST" class="p-3" enctype="multipart/form-data">
     {{ csrfField() }}
+    <!-- 1º passo : documento -->
+    <div class="step my-2">
+      <div>
+        <span>1</span>
+      </div>
+      <p class="m-0 p-1">
+        Escolha o arquivo que deseja cadastrar.
+      </p>
+    </div>
+
+    <div class="form-text">
+      <span class="fw-bold text-danger">Atenção!</span>
+      <p class="m-0">A imagem deve estar no formato jpg, jpeg ou png;</p>
+      <p class="m-0">Recomendamos o uso de aplicativos para scanear seus documentos.</p>
+    </div>
+
     <input type="file" name="image" hidden>
     <div id="drop-file" class="mb-3">
       <div class="drop-file-text">
-        <p>Arraste o arquivo para cá</p>
+        <p>Clique</p>
         <p>ou</p>
-        <p>Clique aqui para selecionar um arquivo</p>
+        <p>arraste um arquivo</p>
         <p><i class="bi bi-upload"></i></p>
       </div>
       <div class="drop-file-image-upload">
       </div>
     </div>
-    <div class="form-floating my-3">
-      <input type="text" class="form-control" name="name" id="name" placeholder="Nome" autofocus value="{{flashMessages.get('name') || ''}}">
+    <div class="step my-2">
+      <div>
+        <span>2</span>
+      </div>
+      <p class="m-0 p-1">
+        Adicione o nome do seu documento.
+      </p>
+    </div>
+    <!--- nome -->
+    <div class="form-floating my-3"> 
+      <input type="text" class="form-control" name="name" id="name" placeholder="Nome" value="{{flashMessages.get('name') || ''}}">
       <label for="name">Nome</label>
       @if(flashMessages.get('errors.name'))
       <div class="invalid-feedback d-block">
@@ -38,6 +86,19 @@
         </div>
       @endif
     </div>
+    <div class="step my-2">
+      <div>
+        <span>3</span>
+      </div>
+      <p class="m-0 p-1">
+        Informações adicionais a respeito do documento.
+      </p>
+    </div>
+    <div class="form-text">
+      <span class="fw-bold text-danger">Atenção!</span>
+      <p class="m-0">As informações a seguir não são obrigatórias.</p>
+    </div>
+    <!--- font -->
     <div class="form-floating my-3">
       <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{flashMessages.get('font') || ''}}">
       <label for="font">Fonte</label>
@@ -47,12 +108,84 @@
       </div>
       @else
         <div class="form-text">
-          Não obrigatório
+          Sabe quem tirou essa foto ?
         </div>
       @endif
     </div>
+    <!--endereço-->
     <div class="form-floating my-3">
-      <input type="text" class="form-control" name="year" id="nameRegister" placeholder="Ano" value="{{flashMessages.get('year') || ''}}">
+      <input type="text" class="form-control" name="city" id="city" placeholder="Cidade" value="{{flashMessages.get('city') || 'Paranaguá'}}">
+      <label for="city">Cidade</label>
+      @if(flashMessages.get('errors.font'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.font')}}
+      </div>
+      @else
+        <div class="form-text">
+          Sabe em que cidade essa foto foi tirada ?
+        </div>
+      @endif
+    </div>
+
+    <div class="form-floating my-3">
+      <input type="text" class="form-control" name="neighborhood" id="neighborhood" placeholder="Bairro" value="{{flashMessages.get('neighborhood') || ''}}">
+      <label for="neighborhood">Bairro</label>
+      @if(flashMessages.get('errors.font'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.font')}}
+      </div>
+      @else
+        <div class="form-text">
+          Sabe em que bairro essa foto foi tirada ?
+        </div>
+      @endif
+    </div>
+
+    <div class="form-floating my-3">
+      <input type="text" class="form-control" name="street" id="street" placeholder="Rua" value="{{flashMessages.get('street') || ''}}">
+      <label for="street">Rua</label>
+      @if(flashMessages.get('errors.font'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.font')}}
+      </div>
+      @else
+        <div class="form-text">
+          Sabe em que rua essa foto foi tirada ?
+        </div>
+      @endif
+    </div>
+
+    <!--- ano -->
+    <div class="step my-2">
+      <div>
+        <span>4</span>
+      </div>
+      <p class="m-0 p-1">
+        Em que ano a imagem foi tirada ?
+      </p>
+    </div>
+    <div class="choice">
+      <div>
+        <button class="btn btn-dark me-2 my-2" type="button" id="btnYearMonth">Sei a data completa</button>
+        <button class="btn btn-dark me-2 my-2" type="button" id="btnYear">Sei apenas o Ano</button>
+      </div>
+    </div>
+
+    <div class="form-floating my-3" style="display: none;" id="dateDiv">
+      <input type="date" class="form-control" name="date" id="date" placeholder="Ano" value="{{flashMessages.get('date') || ''}}">
+      <label for="date">Data</label>
+      @if(flashMessages.get('errors.year'))
+      <div class="invalid-feedback d-block">
+        {{flashMessages.get('errors.year')}}
+      </div>
+      @else
+        <div class="form-text">
+          Quando ela foi tirada ?
+        </div>
+      @endif
+    </div>
+    <div class="form-floating my-3" style="display: none;" id="yearDiv">
+      <input type="number" class="form-control" name="year" id="year" placeholder="Ano" value="{{flashMessages.get('year') || ''}}">
       <label for="year">Ano</label>
       @if(flashMessages.get('errors.year'))
       <div class="invalid-feedback d-block">
@@ -60,11 +193,11 @@
       </div>
       @else
         <div class="form-text">
-          Não obrigatório
+          Quando ela foi tirada ?
         </div>
       @endif
-    </div>  
-    <button type="submit" class="btn btn-success">Enviar</button>
+    </div>
+    <button type="submit" class="w-100 btn btn-success">Enviar</button>
   </form>
 </div>
 
@@ -74,6 +207,31 @@
   const dropText = document.querySelector('.drop-file-text')
   const input = document.querySelector('input[type=file]')
   var uploadedFile
+
+  const btnYearMonth = document.querySelector('#btnYearMonth')
+  const btnYear = document.querySelector('#btnYear')
+  const dateDiv = document.querySelector('#dateDiv')
+  const yearDiv = document.querySelector('#yearDiv')
+  const date = document.querySelector('#date')
+  const year = document.querySelector('#year')
+
+  btnYearMonth.addEventListener('click', () => {
+    btnYear.disabled = false
+    btnYearMonth.disabled = true
+    dateDiv.style.display = 'block'
+    date.focus({preventScroll:false})
+    year.value = ''
+    yearDiv.style.display = 'none'
+  })
+
+  btnYear.addEventListener('click', () => {
+    btnYear.disabled = true
+    btnYearMonth.disabled = false
+    dateDiv.style.display = 'none'
+    yearDiv.style.display = 'block'
+    date.value = ''
+    year.focus({preventScroll:false})
+  })
  
   if (dropZone && dropFile && dropText && input) {
     dropZone.addEventListener('dragover', function(e) {

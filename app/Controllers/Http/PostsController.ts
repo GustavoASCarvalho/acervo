@@ -18,11 +18,12 @@ export default class PostsController {
       return response.redirect().back()
     }
 
-    const image = await Image.query().where({ id: params.id }).firstOrFail()
-    return view.render('post/create', { image })
+    const images = await Image.query()
+
+    return view.render('post/create', { images })
   }
 
-  public async store({ request, response, auth, session, params }: HttpContextContract) {
+  public async store({ request, response, auth, session }: HttpContextContract) {
     const user = auth.user
 
     if (!user) {
@@ -36,7 +37,7 @@ export default class PostsController {
     if (!this.validateCreatePost(data, session)) {
       return response.redirect().back()
     }
-    const post = await Post.create({ 'imageId': params.id, 'userId': user?.id, 'title': data.title, 'description': data.text })
+    const post = await Post.create({ 'userId': user?.id, 'title': data.title, 'description': data.text })
 
     await user?.related('logs').create({ type: 'post', action: 'create', message: `${user.name} criou um novo post`, postId: post.id })
 
@@ -98,9 +99,7 @@ export default class PostsController {
 
   public async edit({ params, view }: HttpContextContract) {
     const post = await Post.query().where('id', params.id).firstOrFail()
-    const image = await Image.query().where({ id: post.imageId }).firstOrFail()
-
-    return view.render('post/edit', { post, image })
+    return view.render('post/edit', { post })
   }
 
   private validateCreatePost(data, session): Boolean {

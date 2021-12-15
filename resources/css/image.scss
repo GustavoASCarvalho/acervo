@@ -20,16 +20,18 @@
 form {
   #drop-file {
     width: 100%;
-    height: 300px;
-    border: 1px dashed #ccc;
+    height: 400px;
+    border: 1px dashed #c3c3c3;
+    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     text-align: center;
+    transition: all 0.3s ease-in-out;
     &:hover {
-      background-color: #f0f0f0;
+      background-color: #c3c3c3;
       cursor: pointer;
     }
     .bi {

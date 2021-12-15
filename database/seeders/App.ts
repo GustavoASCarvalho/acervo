@@ -38,7 +38,7 @@ export default class AppSeeder extends BaseSeeder {
       },
       {
         font: 'Ludovica',
-        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t39.30808-6/p180x540/259476769_4308397249260213_6931715775764804652_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=0debeb&_nc_ohc=xdoxCqL1auIAX-HxTGn&_nc_ht=scontent.fjoi9-1.fna&oh=fbd18cb199785240603598f8aa048d75&oe=61A2EBF2',
+        url: 'https://scontent.fjoi9-1.fna.fbcdn.net/v/t1.6435-9/69307932_1984625261637435_1230887556304863232_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=cdbe9c&_nc_ohc=qlrTDUq4epYAX--EP7Y&_nc_ht=scontent.fjoi9-1.fna&oh=c947fb99891499af6ffbb770e84c0368&oe=61BB4657',
         name: 'eusébio de queirós',
         year: 1850,
       },

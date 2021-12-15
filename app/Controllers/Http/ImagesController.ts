@@ -42,10 +42,7 @@ export default class ImagesController {
     const s3 = Drive.use('s3')
 
     var file = request.file('image')
-    var fileData = request.only(['name', 'font', 'year'])
-
-    console.log(fileData.year);
-
+    var fileData = request.only(['name', 'font', 'city', 'neighborhood', 'street', 'year', 'date'])
 
     if (!file || !user) {
       session.flash('errors', { "success": `Erro ao enviar arquivo` })
@@ -65,7 +62,7 @@ export default class ImagesController {
 
     await fs.readFile(`${Application.tmpPath('uploads')}/${filePath}`, async (error, data) => {
       if (error) {
-        return response.json({ 'error': 'error on file upload' })
+        return response.json({ 'error': 'Error on file upload' })
       } else {
         await s3.put(filePath, data).then(async () => {
           const url = await s3.getUrl(filePath)
@@ -111,7 +108,7 @@ export default class ImagesController {
     if (user?.isAdmin || user?.id === image.userId) {
       return view.render('image/edit', { image })
     } else {
-      session.flash('errors', { "success": `Aceeso negado` })
+      session.flash('errors', { "success": `Acesso negado` })
       session.flashAll()
       return response.redirect().back()
     }
@@ -121,9 +118,6 @@ export default class ImagesController {
     const data = request.only(['name', 'font', 'year'])
     const user = await auth.user
     const image = await Image.query().where('id', params.id).firstOrFail()
-
-    console.log(user?.isAdmin);
-
 
     if (user?.isAdmin || user?.id === image.userId) {
       if (!this.validateImage(data, session)) {
@@ -146,6 +140,7 @@ export default class ImagesController {
       session.flashAll()
       return response.redirect().back()
     }
+
   }
 
   public async delete({ params, session, response, auth }: HttpContextContract) {
@@ -169,6 +164,9 @@ export default class ImagesController {
 
   private validateImage(data, session): Boolean {
     const errors = {}
+
+    console.log(data);
+
 
     if (!data.name) {
       this.registerError(errors, 'name', 'Campo obrigatório')

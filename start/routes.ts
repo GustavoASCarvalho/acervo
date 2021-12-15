@@ -9,17 +9,8 @@ import ptBR from 'date-fns/locale/pt-BR'
 Route.get('/', async ({ view }) => {
   const images = await Image.query().limit(4).orderBy('created_at', 'desc')
   const posts = await Post.query().orderBy('created_at', 'desc').where('is_deleted', false)
-  const allImage = await Image.query()
   posts.forEach(post => {
     post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
-  })
-
-  posts.forEach((post) => {
-    allImage.forEach((image) => {
-      if (image.id == post.imageId) {
-        post['image'] = image
-      }
-    })
   })
 
   return view.render('home', { images, posts })
@@ -33,8 +24,8 @@ Route.group(() => {
   Route.get('/posts', 'PostsController.list').as('post.list')
   Route.get('/posts/:id/edit', 'PostsController.edit').as('post.edit')
   Route.post('/posts/:id/edit', 'PostsController.update').as('post.update')
-  Route.get('/post/:id/create', 'PostsController.create').as('post.create')
-  Route.post('/post/:id/create', 'PostsController.store').as('post.store')
+  Route.get('/post/create', 'PostsController.create').as('post.create')
+  Route.post('/post/create', 'PostsController.store').as('post.store')
   Route.get('/post/:id/delete', 'PostsController.delete').as('post.delete')
 
   Route.get('/image/create', 'ImagesController.create').as('image.create')
