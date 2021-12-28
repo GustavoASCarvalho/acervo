@@ -5,8 +5,8 @@ export default class Images extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.string('url').notNullable()
+      table.increments('id').primary()
+      table.text('url').notNullable()
       table.string('name').nullable()
       table.timestamp('date').nullable()
       table.integer('year').nullable()
