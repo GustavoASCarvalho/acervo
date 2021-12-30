@@ -116,6 +116,7 @@
   
   <form action="{{ route('post.store') }}" method="post">
     {{ csrfField() }}
+    <input type="hidden" name="images">
     <div class="row">
       <div class="col-12">
         <div class="step my-2">
@@ -175,6 +176,7 @@
             <i class="bi bi-plus-lg"></i>
           </div>
         </div>
+        
         <div class="model">
           <div class="model-content">
             <div class="d-flex">
@@ -229,11 +231,12 @@
   for(var i = 0; i < imgBox.length; i++){
     imgBox[i].addEventListener('click', function(e){
       var verif = 0;
-      images.forEach(function(image){
-        if(image.id == e.target.getAttribute('aria-valuetext')){
+
+      for(var i = 0; i < images.length; i++){
+        if(images[i].id == e.target.getAttribute('aria-valuetext')){
           verif = 1;
         }
-      });
+      }
 
       if (verif == 0) {
         var img = e.target;
@@ -245,7 +248,9 @@
           url: url,
           name: name
         };
-        images.push(image);
+        images.push(image.id);
+        document.querySelector('input[name="images"]').value = images
+        
 
         var div = document.createElement('div');
         div.classList.add('img-box-list');

@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Image from 'App/Models/Image';
 import Post from 'App/Models/Post';
+import PostHasImage from 'App/Models/PostHasImage';
 import User from 'App/Models/User';
 
 import { format } from 'date-fns'
@@ -8,7 +9,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 
 export default class PostsController {
 
-  public async create({ view, params, auth, session, response }: HttpContextContract) {
+  public async create({ view, auth, session, response }: HttpContextContract) {
 
     const user = await auth.user
 
@@ -32,12 +33,22 @@ export default class PostsController {
       return response.redirect().back()
     }
 
-    const data = request.only(['text', 'title'])
+    const data = request.only(['title', 'text', 'images'])
 
     if (!this.validateCreatePost(data, session)) {
       return response.redirect().back()
     }
+
+    var imagesId = data.images.split(',')
+
     const post = await Post.create({ 'userId': user?.id, 'title': data.title, 'description': data.text })
+
+    await imagesId.forEach(async (id) => {
+      await PostHasImage.create({
+        postId: post.id,
+        imageId: id
+      })
+    })
 
     await user?.related('logs').create({ type: 'post', action: 'create', message: `${user.name} criou um novo post`, postId: post.id })
 
