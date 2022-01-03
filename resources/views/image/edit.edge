@@ -14,11 +14,12 @@
 <div class="container">
     <form action="{{route('image.update', {id: image.id})}}" method="POST" class="p-3">
         {{ csrfField() }}
+        {{ inspect(image.$attributes)}}
         <div class="d-flex align-items-center justify-content-center">
             <img src="{{image.url}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
         </div>
-        <div class="form-floating my-3">
-          <input type="text" class="form-control" name="name" id="name" placeholder="Nome" autofocus value="{{flashMessages.get('name') || image.name }}">
+        <div class="form-floating my-3"> 
+          <input type="text" class="form-control" name="name" id="name" placeholder="Nome" value="{{image.name || ''}}">
           <label for="name">Nome</label>
           @if(flashMessages.get('errors.name'))
           <div class="invalid-feedback d-block">
@@ -30,32 +31,67 @@
             </div>
           @endif
         </div>
+        <!--- font -->
         <div class="form-floating my-3">
-          <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{flashMessages.get('font') || image.font }}">
+          <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{image.font || ''}}">
           <label for="font">Fonte</label>
           @if(flashMessages.get('errors.font'))
-          <div class="invalid-feedback d-block">
-            {{flashMessages.get('errors.font')}}
-          </div>
-          @else
-            <div class="form-text">
-              Não obrigatório
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.font')}}
+            </div> 
+          @endif
+        </div>
+        <!--endereço-->
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="city" id="city" placeholder="Cidade" value="{{image.city || ''}}">
+          <label for="city">Cidade</label>
+          @if(flashMessages.get('errors.font'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.font')}}
             </div>
           @endif
         </div>
+    
         <div class="form-floating my-3">
-          <input type="text" class="form-control" name="year" id="nameRegister" placeholder="Ano" value="{{flashMessages.get('year') || image.year }}">
-          <label for="year">Ano</label>
-          @if(flashMessages.get('errors.year'))
-          <div class="invalid-feedback d-block">
-            {{flashMessages.get('errors.year')}}
-          </div>
-          @else
-            <div class="form-text">
-              Não obrigatório
+          <input type="text" class="form-control" name="neighborhood" id="neighborhood" placeholder="Bairro" value="{{image.neighborhood || ''}}">
+          <label for="neighborhood">Bairro</label>
+          @if(flashMessages.get('errors.font'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.font')}}
             </div>
           @endif
-        </div>  
+        </div>
+    
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="street" id="street" placeholder="Rua" value="{{image.street || ''}}">
+          <label for="street">Rua</label>
+          @if(flashMessages.get('errors.font'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.font')}}
+            </div>
+          @endif
+        </div>
+
+        <div class="form-floating my-3">
+          <input type="number" class="form-control" name="year" id="year" placeholder="Rua" value="{{image.year || ''}}">
+          <label for="year">Rua</label>
+          @if(flashMessages.get('errors.font'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.font')}}
+            </div>
+          @endif
+        </div>
+
+        <div class="form-floating my-3">
+          <input type="date" class="form-control" name="date" id="date" placeholder="Rua" value="{{image.date || ''}}">
+          <label for="date">Rua</label>
+          @if(flashMessages.get('errors.font'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.font')}}
+            </div>
+          @endif
+        </div>
+
         <button type="submit" class="btn btn-dark">Atualizar</button>
         <a href="{{route('image.delete', {id: image.id})}}"><button type="button" class="btn btn-danger">Excluir</button></a>
     </form>  

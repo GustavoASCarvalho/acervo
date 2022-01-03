@@ -32,12 +32,9 @@
               <p class="card-text">{{image.name}}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group-vertical" role="group" aria-label="Basic mixed styles example">
-                  @if(auth.user?.isAdmin || auth.user?.isModerator)
-                  <a href="{{route('post.store', { id: image.id })}}" style="width: 100%;"><button type="button" class="btn btn-sm btn-outline-success mt-1" style="width: 100%;">Criar nova publicação</button></a>
-                  @if(auth.user?.isModerator && auth.user?.id == image.userId || auth.user?.isAdmin)
-                    <a href="{{route('image.edit', { id: image.id })}}" style="width: 100%;"><button type="button" class="btn btn-sm btn-outline-secondary mt-1" style="width: 100%;">Editar imagem</button></a>
-                  @endif
-                @endif 
+                @if(auth.user?.isModerator && auth.user?.id == image.userId || auth.user?.isAdmin)
+                  <a href="{{route('image.edit', { id: image.id })}}" style="width: 100%;"><button type="button" class="btn btn-sm btn-outline-secondary mt-1" style="width: 100%;">Editar imagem</button></a>
+                @endif
                 </div>
                 <small class="text-muted">~{{image.year || 'sem data'}}</small>
               </div>

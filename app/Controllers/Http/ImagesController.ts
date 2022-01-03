@@ -72,7 +72,8 @@ export default class ImagesController {
       }
     })
 
-    session.flash('errors', { "success": `Imagem cadastrada com sucesso` })
+
+    session.flash('errors', { "success": `Imagem enviada com sucesso` })
     session.flashAll()
     return response.redirect().back()
   }
@@ -165,15 +166,23 @@ export default class ImagesController {
   private validateImage(data, session): Boolean {
     const errors = {}
 
-    console.log(data);
-
-
     if (!data.name) {
       this.registerError(errors, 'name', 'Campo obrigatório')
+    } else {
+      if (data.name.length > 100) {
+        this.registerError(errors, 'name', 'Nome muito longo')
+      }
     }
+
     if (data.year) {
       if (data.year.length != 4 || data.year > new Date().getFullYear()) {
         this.registerError(errors, 'year', `Ano inválido, O ano tem que conter 4 digitos e ser menor que ${new Date().getFullYear() + 1}`)
+      }
+    }
+
+    if (data.font) {
+      if (data.font.length > 100) {
+        this.registerError(errors, 'font', `Tamanho máximo de 100 caracteres`)
       }
     }
 

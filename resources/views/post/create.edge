@@ -171,12 +171,17 @@
           <span class="fw-bold text-danger">Atenção!</span>
           <p class="m-0">Você deve selecionar ao menos 1 arquivo.</p>
         </div>
+        @if(flashMessages.get('errors.images'))
+        <div class="invalid-feedback d-block">
+          {{flashMessages.get('errors.images')}}
+        </div>
+        @endif
         <div id="image-box" class="my-3 row">
           <div id="box" class="m-1">
             <i class="bi bi-plus-lg"></i>
           </div>
         </div>
-        
+       
         <div class="model">
           <div class="model-content">
             <div class="d-flex">
@@ -196,6 +201,7 @@
         </div>
       </div>
     </div>
+    
     <button class="w-100 btn btn-success mb-5" type="submit">Postar</button>
   </form>
 </div>

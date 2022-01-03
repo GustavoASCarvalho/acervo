@@ -124,6 +124,10 @@ export default class PostsController {
       this.registerError(errors, 'text', 'Campo obrigatório')
     }
 
+    if (!data.images) {
+      this.registerError(errors, 'images', 'Campo obrigatório, selecione pelo menos uma imagem')
+    }
+
     if (Object.entries(errors).length > 0) {
       session.flash('errors', errors)
       session.flashAll()
