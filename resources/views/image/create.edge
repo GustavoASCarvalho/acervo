@@ -170,32 +170,18 @@
         <button class="btn btn-dark me-2 my-2" type="button" id="btnYear">Sei apenas o Ano</button>
       </div>
     </div>
-
+    @if(flashMessages.get('errors.year') || flashMessages.get('errors.date'))
+      <div class="invalid-feedback d-block mb-3">
+        {{flashMessages.get('errors.year') || flashMessages.get('errors.date')}}
+      </div>
+    @endif
     <div class="form-floating my-3" style="display: none;" id="dateDiv">
       <input type="date" class="form-control" name="date" id="date" placeholder="Ano" value="{{flashMessages.get('date') || ''}}">
       <label for="date">Data</label>
-      @if(flashMessages.get('errors.year'))
-      <div class="invalid-feedback d-block">
-        {{flashMessages.get('errors.year')}}
-      </div>
-      @else
-        <div class="form-text">
-          Quando ela foi tirada ?
-        </div>
-      @endif
     </div>
     <div class="form-floating my-3" style="display: none;" id="yearDiv">
       <input type="number" class="form-control" name="year" id="year" placeholder="Ano" value="{{flashMessages.get('year') || ''}}">
       <label for="year">Ano</label>
-      @if(flashMessages.get('errors.year'))
-      <div class="invalid-feedback d-block">
-        {{flashMessages.get('errors.year')}}
-      </div>
-      @else
-        <div class="form-text">
-          Quando ela foi tirada ?
-        </div>
-      @endif
     </div>
     <button type="submit" class="w-100 btn btn-success">Enviar</button>
   </form>

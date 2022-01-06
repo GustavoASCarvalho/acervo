@@ -116,7 +116,7 @@ export default class ImagesController {
   }
 
   public async update({ request, params, response, session, auth }: HttpContextContract) {
-    const data = request.only(['name', 'font', 'year'])
+    const data = request.only(['name', 'font', 'city', 'neighborhood', 'street', 'year', 'date'])
     const user = await auth.user
     const image = await Image.query().where('id', params.id).firstOrFail()
 
@@ -128,6 +128,10 @@ export default class ImagesController {
       image.name = data.name
       image.font = data.font
       image.year = data.year
+      image.city = data.city
+      image.neighborhood = data.neighborhood
+      image.street = data.street
+      image.date = data.date
 
       await image.save()
 
@@ -183,6 +187,12 @@ export default class ImagesController {
     if (data.font) {
       if (data.font.length > 100) {
         this.registerError(errors, 'font', `Tamanho máximo de 100 caracteres`)
+      }
+    }
+
+    if (data.date) {
+      if (new Date(data.date).getTime() > new Date().getTime()) {
+        this.registerError(errors, 'date', `Data inválida, a data não pode ser maior que a data atual`)
       }
     }
 

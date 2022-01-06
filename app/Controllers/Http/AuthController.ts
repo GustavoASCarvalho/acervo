@@ -128,7 +128,6 @@ export default class AuthController {
     var file = request.file('img')
 
     if (file) {
-      console.log('entrou');
 
       const s3 = Drive.use('s3')
       const filePath = `${Date.now()}-${file?.clientName}`

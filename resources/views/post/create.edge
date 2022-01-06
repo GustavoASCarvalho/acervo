@@ -217,11 +217,11 @@
   var images = [];
 
   busca.addEventListener('keyup', function(e){
-    var value = e.target.value;
+    var value = e.target.value.toLocaleLowerCase();
     
     for(var i = 0; i < imgBox.length; i++){
       var img = imgBox[i].querySelector('img');
-      var text = img.getAttribute('alt');
+      var text = img.getAttribute('alt').toLocaleLowerCase();
       if(text.indexOf(value) == -1){
         imgBox[i].style.display = 'none';
       }else{
@@ -232,14 +232,14 @@
 
   closeModal.addEventListener('click', function(){
     model.style.display = 'none';
+    document.documentElement.style.overflow = 'auto';
   });
 
   for(var i = 0; i < imgBox.length; i++){
     imgBox[i].addEventListener('click', function(e){
       var verif = 0;
-
       for(var i = 0; i < images.length; i++){
-        if(images[i].id == e.target.getAttribute('aria-valuetext')){
+          if(images[i] == e.target.getAttribute('aria-valuetext')){
           verif = 1;
         }
       }

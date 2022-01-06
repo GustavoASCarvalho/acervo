@@ -14,7 +14,6 @@
 <div class="container">
     <form action="{{route('image.update', {id: image.id})}}" method="POST" class="p-3">
         {{ csrfField() }}
-        {{ inspect(image.$attributes)}}
         <div class="d-flex align-items-center justify-content-center">
             <img src="{{image.url}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
         </div>
@@ -31,6 +30,7 @@
             </div>
           @endif
         </div>
+        
         <!--- font -->
         <div class="form-floating my-3">
           <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{image.font || ''}}">
@@ -45,9 +45,9 @@
         <div class="form-floating my-3">
           <input type="text" class="form-control" name="city" id="city" placeholder="Cidade" value="{{image.city || ''}}">
           <label for="city">Cidade</label>
-          @if(flashMessages.get('errors.font'))
+          @if(flashMessages.get('errors.city'))
             <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.font')}}
+              {{flashMessages.get('errors.city')}}
             </div>
           @endif
         </div>
@@ -55,9 +55,9 @@
         <div class="form-floating my-3">
           <input type="text" class="form-control" name="neighborhood" id="neighborhood" placeholder="Bairro" value="{{image.neighborhood || ''}}">
           <label for="neighborhood">Bairro</label>
-          @if(flashMessages.get('errors.font'))
+          @if(flashMessages.get('errors.neighborhood'))
             <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.font')}}
+              {{flashMessages.get('errors.neighborhood')}}
             </div>
           @endif
         </div>
@@ -65,29 +65,33 @@
         <div class="form-floating my-3">
           <input type="text" class="form-control" name="street" id="street" placeholder="Rua" value="{{image.street || ''}}">
           <label for="street">Rua</label>
-          @if(flashMessages.get('errors.font'))
+          @if(flashMessages.get('errors.street'))
             <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.font')}}
+              {{flashMessages.get('errors.street')}}
             </div>
           @endif
         </div>
 
         <div class="form-floating my-3">
-          <input type="number" class="form-control" name="year" id="year" placeholder="Rua" value="{{image.year || ''}}">
-          <label for="year">Rua</label>
-          @if(flashMessages.get('errors.font'))
+          <input type="number" class="form-control" name="year" id="year" placeholder="Ano" value="{{image.year || ''}}">
+          <label for="year">Ano</label>
+          @if(flashMessages.get('errors.year'))
             <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.font')}}
+              {{flashMessages.get('errors.year')}}
             </div>
           @endif
         </div>
-
+        
         <div class="form-floating my-3">
-          <input type="date" class="form-control" name="date" id="date" placeholder="Rua" value="{{image.date || ''}}">
-          <label for="date">Rua</label>
-          @if(flashMessages.get('errors.font'))
+          @if(image.data)
+            <input type="date" class="form-control" name="date" id="date" placeholder="Data" value="{{image.date.toLocaleDateString().split("/").reverse().join("-")}}">
+          @else
+            <input type="date" class="form-control" name="date" id="date" placeholder="Data" value="">
+          @endif
+          <label for="date">Data completa</label>
+          @if(flashMessages.get('errors.date'))
             <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.font')}}
+              {{flashMessages.get('errors.date')}}
             </div>
           @endif
         </div>
@@ -96,4 +100,18 @@
         <a href="{{route('image.delete', {id: image.id})}}"><button type="button" class="btn btn-danger">Excluir</button></a>
     </form>  
 </div>
+
+<script>
+  const inputDate = document.querySelector('#date');
+  const inputYear = document.querySelector('#year');
+
+  inputDate.addEventListener('change', function(e){
+    inputYear.value = ''
+  });
+
+  inputYear.addEventListener('keyup', function(e){
+    inputDate.value = ''
+  });
+
+</script>
 @endsection
