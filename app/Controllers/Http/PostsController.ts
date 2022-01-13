@@ -70,9 +70,9 @@ export default class PostsController {
     }
 
     if (user.isAdmin) {
-      posts = await Post.query().orderBy('created_at', 'desc')
+      posts = await Post.query().orderBy('created_at', 'desc').where('isDeleted', false)
     } else if (user.isModerator) {
-      posts = await Post.query().where('userId', user.id).orderBy('created_at', 'desc')
+      posts = await Post.query().where('userId', user.id).orderBy('created_at', 'desc').where('isDeleted', false)
     }
 
     posts.forEach(post => {
@@ -111,6 +111,38 @@ export default class PostsController {
   public async edit({ params, view }: HttpContextContract) {
     const post = await Post.query().where('id', params.id).firstOrFail()
     return view.render('post/edit', { post })
+  }
+
+  public async delete({ params, session, response, auth }: HttpContextContract) {
+    const post = await Post.query().where('id', params.id).firstOrFail()
+
+    const user = await auth.user
+
+    if (!user) {
+      session.flash('errors', { "success": `Acesso negado` })
+      session.flashAll()
+      return response.redirect().back()
+    }
+
+    if (user.isAdmin) {
+      post.isDeleted = true
+      await post.save()
+    } else if (user.isModerator) {
+      if (post.userId == user.id) {
+        post.isDeleted = true
+        await post.save()
+      } else {
+        session.flash('errors', { "success": `Acesso negado` })
+        session.flashAll()
+        return response.redirect().back()
+      }
+    }
+
+    await user?.related('logs').create({ type: 'post', action: 'delete', message: `${user.name} deletou um post`, postId: post.id })
+    session.flash('errors', { "success": `Post deletado` })
+    session.flashAll()
+
+    return response.redirect().toRoute('post.list')
   }
 
   private validateCreatePost(data, session): Boolean {

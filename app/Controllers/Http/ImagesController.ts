@@ -5,13 +5,16 @@ import fs from 'fs'
 import Image from 'App/Models/Image'
 import Post from 'App/Models/Post'
 import User from 'App/Models/User'
+import PostHasImage from 'App/Models/PostHasImage'
 
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 
 export default class ImagesController {
   public async index({ view }: HttpContextContract) {
+    //carregar todas as imagens e mandar para o front-end
     const images = await Image.query().where('isDeleted', false)
+
     return view.render('image/index', { images })
   }
 
@@ -20,9 +23,12 @@ export default class ImagesController {
   }
 
   public async search({ view, request }: HttpContextContract) {
+
+    // pesquisar imagem por nome (TODO: pesquisar por palavras relacionadas, categorias e mais)
+
     const data = request.only(['search'])
     const allImages = await Image.query().where('isDeleted', false)
-    var images: any[] = []
+    var images: Array<Image> = []
 
     if (!data.search) {
       images = allImages
@@ -38,40 +44,49 @@ export default class ImagesController {
   }
 
   public async store({ request, response, auth, session }: HttpContextContract) {
-    const user = auth.user
-    const s3 = Drive.use('s3')
 
+    //caregar o usuario logado e os dados do front-end
+    const user = auth.user
     var file = request.file('image')
     var fileData = request.only(['name', 'font', 'city', 'neighborhood', 'street', 'year', 'date'])
 
+    //verificar dados
     if (!file || !user) {
       session.flash('errors', { "success": `Erro ao enviar arquivo` })
       session.flashAll()
       return response.redirect().back()
     }
+
     if (!this.validateImage(fileData, session)) {
       return response.redirect().back()
     }
 
+    //usar o serviço s3 da amazon (TODO: mudar para serviço local)
+    const s3 = Drive.use('s3')
+
+    //criar um nome unico para o arquivo
     const filePath = `${Date.now()}-${file?.clientName}`
 
+    //mandar o arquivo para a pasta uploads
     await file.move(Application.tmpPath('uploads'), {
       name: filePath,
-      overwrite: true, // overwrite in case of conflict
+      overwrite: true,
     })
 
+    //carregar o arquivo 
     await fs.readFile(`${Application.tmpPath('uploads')}/${filePath}`, async (error, data) => {
       if (error) {
-        return response.json({ 'error': 'Error on file upload' })
+        return response.json({ 'error': 'Erro no cadastro do arquivo' })
       } else {
+        //mandar para o s3 da amazon
         await s3.put(filePath, data).then(async () => {
           const url = await s3.getUrl(filePath)
           const img = await user.related('images').create({ 'name': fileData.name, 'url': url, 'font': fileData.font, 'year': fileData.year })
+          //criar log de imagem criada
           await user.related('logs').create({ type: 'image', action: 'create', message: `${user.name} criou uma imagem`, 'imageId': img.id })
         })
       }
     })
-
 
     session.flash('errors', { "success": `Imagem enviada com sucesso` })
     session.flashAll()
@@ -79,27 +94,44 @@ export default class ImagesController {
   }
 
   public async show({ view, params, response, session }: HttpContextContract) {
-    const image = await Image.query().where('id', params.id).firstOrFail()
 
+    //pegar imagem
+    const image = await Image.query().where('id', params.id).firstOrFail()
+    if (image.date) {
+      image['data'] = format(Number(image.date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+    }
+
+    //verificar se imagem não foi excluida
     if (image.isDeleted) {
       session.flash('errors', { "success": `Aceeso negado` })
       session.flashAll()
       return response.redirect().back()
     }
 
-    const imagePosts = await Post.query().where('image_id', params.id).where('is_deleted', false).orderBy('created_at', 'desc').limit(5)
-    const posts = await Post.query().orderBy('created_at', 'desc').where('is_deleted', false).limit(5)
+    //pegar os posts relacionados com a imagem, e formatar a data para mandar para o front-end
+    const posts: Array<Post> = []
+
+    const postHasImages = await PostHasImage.query().where('image_id', params.id)
+
+
+    await postHasImages.forEach(async e => {
+      var post = await Post.query().where('id', e.postId).firstOrFail()
+      post['data'] = format(Number(post.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+      post['user'] = await User.query().where('id', post.userId).firstOrFail()
+      posts.push(post)
+    });
+
+
+    //pegar o usuario que cadastrou a imagem
     const user = await User.query().where('id', image.userId).firstOrFail()
 
-    posts.forEach(post => {
-      post['data'] = format(Number(post.createdAt), "dd 'de' MMMM', às ' HH:mm'h'", { locale: ptBR })
-    })
-
+    //aumentar a contagem de visualização da imagem e salvar
     image.views += 1
 
     await image.save()
 
-    return view.render('image/show', { image, posts, imagePosts, user })
+    //carregar a página 
+    return view.render('image/show', { image, posts, user })
   }
 
   public async edit({ view, params, auth, response, session }: HttpContextContract) {

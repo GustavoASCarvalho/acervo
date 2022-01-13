@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, } from '@ioc:Adonis/Lucid/Orm'
+// import Post from './Post'
+// import PostHasImage from './PostHasImage'
 
 export default class Image extends BaseModel {
   @column({ isPrimary: true })
@@ -50,4 +52,6 @@ export default class Image extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  // @hasManyThrough([Post, PostHasImage])
+  // public posts: HasManyThrough<typeof Post>
 }

@@ -5,10 +5,12 @@
 $starorange: #df711b;
 $background: #fff;
 $black: #030303;
+$azul: #362bd3;
 
 $custom-theme-colors: (
   "starorange": $starorange,
-  "background": $background
+  "background": $background,
+  "azul": $azul
 );
 
 $theme-colors: map-merge($theme-colors, $custom-theme-colors);
@@ -32,7 +34,7 @@ body {
 .alert-card {
   position: fixed;
   z-index: 3000;
-  bottom: 3%;
+  bottom: 3%;                                                                           
   left: 3%;
   padding: 10px;
   border: 1px solid #1e1f22;
