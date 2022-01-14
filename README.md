@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">Gerênciamento de rifas</h1>
+  <h1 align="center">Sistema de Acervo</h1>
 </p>
 
 <p>Você acaba de encontrar meu repositório do sistema de imagens para preservação do patrimonio histórico de paranaguá no GitHub, nele você como usuario podera visualizar as imagens e suas histórias, e como moderador você podera cadastra-las</p>
