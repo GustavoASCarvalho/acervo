@@ -1,0 +1,71 @@
+@layout('layouts/main')
+@set('title', 'Lista de Usuarios - Acervo Digital')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, Lista de usuarios" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+@endsection
+
+@section('content')
+    @!component('components/nav')
+    <div class="container">
+        <div style="height: 20px"></div>
+        <div class="input-group input-group-lg my-4">
+            <input type="text" class="form-control" placeholder="Pesquisar por ação, objeto ou mensagem" aria-label="Recipient's username" aria-describedby="button-addon2" name="data" id="data-post">
+        </div>
+        <table class="table table-ligth">
+            <tbody id="tbody-post">
+                @each(log in logs)
+                    <tr class="tr-post">
+                        <td>{{log.data}}</td>
+                        <td>{{log.action}}</td>
+                        <td>{{log.type}}</td>
+                        <td>{{log.message}}</td>
+                        <td>
+                        @if(log.postId && log.action != 'delete')
+                            <a href="{{route('post.show', {id: log.postId})}}"><button class="btn btn-dark">Ver</button></a>
+                        @elseif(log.imageId && log.action != 'delete')
+                            <a href="{{route('image.show', {id: log.imageId})}}"><button class="btn btn-dark">Ver</button></a>
+                        @elseif(log.userId && log.action != 'delete')
+                            <a href="{{route('auth.show', {id: log.userId})}}"><button class="btn btn-dark">Ver</button></a>
+                        @endif
+                        </td>
+                    </tr>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        try {
+            const tbody = document.querySelector('#tbody-post')
+            const tr = document.querySelectorAll('.tr-post')
+            const input = document.querySelector('#data-post')
+
+            input.addEventListener('keyup', (e) => {
+                if (input.value.length > 1) {
+                    tbody.innerHTML = ""
+                    tr.forEach((value) => {
+                        const data = value.children[0].textContent.toLowerCase()
+                        console.log(data);
+                        const action = value.children[1].textContent.toLowerCase()
+                        const type = value.children[2].textContent.toLowerCase()
+                        const message = value.children[3].textContent.toLowerCase()
+                        const inputValue = input.value.toLowerCase()
+                        if (data.includes(inputValue) || action.includes(inputValue) || type.includes(inputValue) || message.includes(inputValue)) {
+                            tbody.innerHTML += value.innerHTML
+                        }
+                    })
+                } else {
+                    tbody.innerHTML = ""
+                    tr.forEach((value) => {
+                        tbody.innerHTML += value.innerHTML
+                    })
+                }
+            })
+        } catch {
+            console.log('Não foi possível carregar a lista de usuários')
+        }
+    </script>
+@endsection
