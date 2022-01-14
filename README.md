@@ -52,7 +52,7 @@ Na raiz do projeto
 - [x] Adicionado validações de formulários
 - [x] Adicionado bibliotecas de segurança
 - [x] Atualizando relação de modelagem imagem/post para N pra N
-- [?]
+- [x] ...
 
 ## Participantes
 
