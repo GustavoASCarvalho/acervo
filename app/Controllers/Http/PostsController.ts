@@ -157,7 +157,7 @@ export default class PostsController {
     }
 
     if (!data.images) {
-      this.registerError(errors, 'images', 'Campo obrigatório, selecione pelo menos uma imagem')
+      this.registerError(errors, 'images', 'Campo obrigatório, selecione ao menos uma imagem')
     }
 
     if (Object.entries(errors).length > 0) {

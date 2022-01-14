@@ -105,6 +105,11 @@
       width: 100px;
       border-radius: 1rem;
     }
+    .img-box-list img:hover {
+      /*filtro vermelho*/
+      filter: grayscale(100%);
+      transition: .2s all;
+    }
 
   </style>
 @endsection
@@ -214,6 +219,7 @@
   var imgBox = document.querySelectorAll('.img-box');
   var closeModal = document.getElementById('closeModal');
 
+  var ids = [];
   var images = [];
 
   busca.addEventListener('keyup', function(e){
@@ -237,9 +243,10 @@
 
   for(var i = 0; i < imgBox.length; i++){
     imgBox[i].addEventListener('click', function(e){
+      
       var verif = 0;
       for(var i = 0; i < images.length; i++){
-          if(images[i] == e.target.getAttribute('aria-valuetext')){
+          if(images[i].id == e.target.getAttribute('aria-valuetext')){
           verif = 1;
         }
       }
@@ -254,11 +261,44 @@
           url: url,
           name: name
         };
-        images.push(image.id);
-        document.querySelector('input[name="images"]').value = images
-        
+        images.push(image);
+        ids = [];
+        images.forEach((image)=> {
+          ids.push(image.id);
+        });
+        document.querySelector('input[name="images"]').value = ids
 
-        var div = document.createElement('div');
+        recriar(images);
+
+        model.style.display = 'none';
+        document.documentElement.style.overflow = 'auto';
+      }
+    });
+  }
+
+  imageBox.addEventListener('click', (e)=> {
+    images.forEach((image)=> {
+      if (e.target.getAttribute('aria-valuetext') == image.id) {
+        images = images.filter((image)=> {
+          return image.id != e.target.getAttribute('aria-valuetext');
+        });
+        //criar um array com os id das imagens
+        ids = [];
+        images.forEach((image)=> {
+          ids.push(image.id);
+        });
+
+        document.querySelector('input[name="images"]').value = ids;
+        recriar(images);
+      }
+    })
+  })
+
+  recriar = (images) => {
+    imageBox.innerHTML = '';
+    imageBox.appendChild(box);
+    images.forEach(image => {
+      var div = document.createElement('div');
         div.classList.add('img-box-list');
         div.classList.add('m-1');
         div.classList.add('p-0');
@@ -268,12 +308,8 @@
           </a>
         `;
         imageBox.appendChild(div);
-        model.style.display = 'none';
-        document.documentElement.style.overflow = 'auto';
-      }
     });
   }
-
 
   box.addEventListener('click', function() {
     model.style.display = 'block';

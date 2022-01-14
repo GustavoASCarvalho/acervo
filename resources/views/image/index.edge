@@ -27,9 +27,8 @@
             <a href="{{route('image.show', {id: image.id})}}">
               <img src="{{image.url}}" alt="{{image.name}}">
             </a>
-            
-            <div class="card-body">
-              <p class="card-text">{{image.name}}</p>
+            <div class="card-body p-2">
+              <p class="card-text m-0">{{image.name}}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group-vertical" role="group" aria-label="Basic mixed styles example">
                 @if(auth.user?.isModerator && auth.user?.id == image.userId || auth.user?.isAdmin)

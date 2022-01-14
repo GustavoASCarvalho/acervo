@@ -121,6 +121,15 @@ export default class ImagesController {
       posts.push(post)
     });
 
+    var allPosts
+
+    if (posts.length === 0) {
+      allPosts = await Post.query().where('isDeleted', false).limit(3).orderBy('createdAt', 'desc')
+      allPosts.forEach(async post => {
+        post['data'] = format(Number(post.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+        post['user'] = await User.query().where('id', post.userId).firstOrFail()
+      })
+    }
 
     //pegar o usuario que cadastrou a imagem
     const user = await User.query().where('id', image.userId).firstOrFail()
@@ -131,7 +140,7 @@ export default class ImagesController {
     await image.save()
 
     //carregar a página 
-    return view.render('image/show', { image, posts, user })
+    return view.render('image/show', { image, posts, user, allPosts })
   }
 
   public async edit({ view, params, auth, response, session }: HttpContextContract) {

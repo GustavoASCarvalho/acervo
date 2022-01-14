@@ -7,29 +7,37 @@
     @entryPointStyles('nav')
     @entryPointScripts('image')
     @entryPointStyles('image')
+    <style>
+        .img-box img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 @endsection
 
 @section('content')
 @!component('components/nav')
-<section class="bg-secondary">
-    <p class="text-center text-light m-0 h4 py-2">{{image.name}} - <small class="h6"><i class="bi bi-eye"></i> {{image.views}}</small></p>
-</section>
+
 <div class="container my-4">
     <div class="row">
-        <div class="col-12 col-md-7 d-flex flex-row align-items-start justify-content-center">
-            <div class="d-flex flex-column">
-                <a href="{{image.url}}" download="{{image.name}}" target="_blank"><img src="{{image.url}}" alt="{{image.name}}" class="img-fluid"></a>
-                <span class="fs-6"><b>Fonte:</b> {{image.font || 'sem fonte'}}</span>
-                @if(image.year)
-                    <span><b>Ano da foto:</b> {{image.year}}</span>
-                @elseif(image.date)
-                    <span><b>Data da foto:</b> {{image.data}}</span>
-                @endif
+        <div class="col-12 col-md-7 d-flex flex-column align-items-start">
+            <div class="img-box" style="width: 100%;">
+                <a href="{{image.url}}" download="{{image.name}}" target="_blank"><img src="{{image.url}}" alt="{{image.name}}"></a>
             </div>
+            <span class="fs-6"><b>Nome:</b> {{image.name}}</span>
+            <span class="fs-6"><b>Fonte:</b> {{image.font || 'sem fonte'}}</span>
+            @if(image.year)
+                <span><b>Ano da foto:</b> {{image.year}}</span>
+            @elseif(image.date)
+                <span><b>Data da foto:</b> {{image.data}}</span>
+            @else
+                <span><b>Data da foto:</b> sem data</span>
+            @endif
+            <span class="fs-6"><b>Views:</b> {{image.views}}</span>
         </div>
         <div class="col-12 col-md-5 d-flex flex-column" id="ultimas-publicacoes">
             @if(posts.length > 0)
-                <h3 class="mt-5 mt-md-0 text-center">Conheça suas histórias</h3>
+                <h3 class="mt-5 mt-md-0 text-center">Conheça as histórias desse documento</h3>
                 @each(lastPost in posts)
                     <div class="card my-2">
                         <div class="card-body">
@@ -40,7 +48,17 @@
                     </div>
                 @endeach
             @else
-                <h3 class="mt-5 mt-md-0 text-center">Nenhuma publicação relacionada</h3>
+                <h3 class="mt-5 mt-md-0 text-center">Nenhuma história a respeito desse documento</h3>
+                <h4 class="text-center fs-5">confira as histórias de outros documentos</h4>
+                @each(lastPost in allPosts)
+                <div class="card my-2">
+                    <div class="card-body">
+                        <h5 class="card-title">{{lastPost.title.toUpperCase()}}</h5>
+                        <small class="py-2">Criado por: {{lastPost.user.name}} em {{lastPost.data}}</small>
+                        <a href="{{route('post.show', {id: lastPost.id})}}" class="btn btn-primary stretched-link">Visualizar</a>
+                    </div>
+                </div>
+                @endeach
             @endif
         </div>
     </div>
