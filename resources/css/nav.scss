@@ -7,8 +7,19 @@ nav {
     box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.3);
     transition: all .5s;
 
+    // backgournd banner image with opacity
+    background: url('../images/banner.png') no-repeat center center;
+    
+    .navbar-toggler {
+        border: 1px white solid;
+        &:focus {
+            box-shadow: #fff 0 0 0 0.25rem;
+        }
+    }
+    
+
     h2 {
-        font-size: 25px;
+        font-size: 30px;
         font-family: 'Merriweather Sans', sans-serif;
         font-weight: 700;
         p{
@@ -23,24 +34,35 @@ nav {
         .li-hover {
             border-bottom: 3px transparent solid;
             transition: all .3s;
-            font-weight: 700;
         }
         .li-hover:hover {
-            border-bottom: 3px #000 solid;
+            border-bottom: 3px #fff solid;
             cursor: pointer;
-            color: #030303;
+            color: #ffffff;
         }
     }
 
     .navbar-collapse {
-        background-color: #fff;
+        background-color: transparent;
         .nav-link {
             padding: 10px;
             font-weight: 700;
+            color: white;
+            text-shadow: 0px 0px 6px #000;
         }
     }
+
+    .show {
+        background-color: #333333b3;
+        box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.3);
+        
+    }
+
     .logo-div{
         transition: all .5s;
+        
+        // text shadow for black background
+        text-shadow: 0px 0px 6px #000;
     }
     .logo {
         width: 80px;
