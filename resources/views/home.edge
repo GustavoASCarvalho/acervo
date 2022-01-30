@@ -22,7 +22,7 @@
       <div class="col-12 col-md-6 col-lg-3 d-flex align-self-stretch my-2">
         <div class="card card-img">
           <a href="{{route('image.show', { id: image.id})}}">
-            <img src="{{image.url}}" class="card-img-top" alt="{{image.name}}">
+            <img src="/uploads/{{image.path}}" class="card-img-top" alt="{{image.name}}">
           </a>
           <div class="card-body">
             <h5 class="card-title">{{image.name}}</h5>
@@ -34,6 +34,7 @@
   </div>
 </main>
 <section>
+  @if(posts.length > 0)
   <h2 class="text-center">Ultimas publicações</h2>
   <p class="text-center">Confira as histórias por trás de cada documento</p>
   <div id="container">
@@ -54,6 +55,10 @@
   <div class="d-flex d-column justify-content-center mt-2 mb-5">
     <button type="button" class="btn btn-dark rounded-pill" id="btn-load" >Mais</button>
   </div>
+  @else
+  <h2 class="text-center">Sem nenhuma publicação recente</h2>
+  <p class="text-center">Acesso nosso <b>ACERVO</b> e Aguarde por nossas <b>histórias</b></p>
+  @endif
 </section>
 @!component('components/footer')
 @endsection

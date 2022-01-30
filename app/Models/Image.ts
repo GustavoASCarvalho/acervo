@@ -7,8 +7,11 @@ export default class Image extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
+  // @column()
+  // public url: string
+
   @column()
-  public url: string
+  public path: string
 
   @column()
   public name?: string

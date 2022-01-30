@@ -54,6 +54,23 @@
       border-radius: 1rem;
     }
 
+    .card {
+      border: 1px solid gray;
+    }
+
+    .card:hover {
+      box-shadow: none;
+        transform: scale(1.02);
+    }
+
+    .card img {
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
     .model {
     display: none;
     position: fixed;
@@ -77,22 +94,6 @@
       box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
       border-radius: 15px;
     }
-
-    .img-box {
-      border-radius: 1rem;
-      transition: .3s all;
-    }
-
-    .img-box img {
-      height: 100%;
-      width: 100%;
-    }
-
-    .img-box:hover {
-      cursor: pointer;
-      transform: scale(1.03);
-    }
-
     .img-box-list {
       height: 100px;
       width: 100px;
@@ -193,15 +194,15 @@
               <button type="button" class="btn btn-dark me-2" id="closeModal">X</button>
               <input type="text" id="busca" placeholder="pesquisar..." class="w-100">
             </div>
-            <div class="row">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5" id="grid">
               @each(image in images)
-                <div class="img-box col-sm-6 col-md-4 col-lg-3 p-2">
-                  <a>
-                    <img src="{{image.url}}" alt="{{image.name}}" aria-valuetext="{{image.id}}">
-                  </a>
+                <div class="col">
+                  <div class="card card-hover m-2 img-box">
+                    <img src="/uploads/{{image.path}}" alt="{{image.name}}" aria-valuetext="{{image.id}}">
+                  </div>
                 </div>
-              @endeach  
-            </div> 
+              @endeach
+            </div>
           </div>
         </div>
       </div>
@@ -243,6 +244,7 @@
 
   for(var i = 0; i < imgBox.length; i++){
     imgBox[i].addEventListener('click', function(e){
+      console.log(e.target.getAttribute('aria-valuetext'));
       
       var verif = 0;
       for(var i = 0; i < images.length; i++){

@@ -15,7 +15,7 @@
     <form action="{{route('image.update', {id: image.id})}}" method="POST" class="p-3">
         {{ csrfField() }}
         <div class="d-flex align-items-center justify-content-center">
-            <img src="{{image.url}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
+            <img src="/uploads/{{image.path}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
         </div>
         <div class="form-floating my-3"> 
           <input type="text" class="form-control" name="name" id="name" placeholder="Nome" value="{{image.name || ''}}">

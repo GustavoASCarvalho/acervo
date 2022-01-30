@@ -1,14 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Drive from '@ioc:Adonis/Core/Drive'
-import Application from '@ioc:Adonis/Core/Application'
-import fs from 'fs'
-import Image from 'App/Models/Image'
 import Post from 'App/Models/Post'
 import User from 'App/Models/User'
 import PostHasImage from 'App/Models/PostHasImage'
+import Drive from '@ioc:Adonis/Core/Drive'
 
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import Image from 'App/Models/Image'
 
 export default class ImagesController {
   public async index({ view }: HttpContextContract) {
@@ -62,31 +60,32 @@ export default class ImagesController {
     }
 
     //usar o serviço s3 da amazon (TODO: mudar para serviço local)
-    const s3 = Drive.use('s3')
+    // const s3 = Drive.use('s3')
 
     //criar um nome unico para o arquivo
     const filePath = `${Date.now()}-${file?.clientName}`
 
     //mandar o arquivo para a pasta uploads
-    await file.move(Application.tmpPath('uploads'), {
-      name: filePath,
-      overwrite: true,
+    await file.moveToDisk('./', { name: filePath }).then(async () => {
+      const img = await user.related('images').create({ 'name': fileData.name, 'path': filePath, 'font': fileData.font, 'year': fileData.year, 'city': fileData.city, 'neighborhood': fileData.neighborhood, 'street': fileData.street, 'date': fileData.date })
+      //criar log de imagem criada
+      await user.related('logs').create({ type: 'image', action: 'create', message: `${user.name} criou uma imagem`, 'imageId': img.id })
     })
 
     //carregar o arquivo 
-    await fs.readFile(`${Application.tmpPath('uploads')}/${filePath}`, async (error, data) => {
-      if (error) {
-        return response.json({ 'error': 'Erro no cadastro do arquivo' })
-      } else {
-        //mandar para o s3 da amazon
-        await s3.put(filePath, data).then(async () => {
-          const url = await s3.getUrl(filePath)
-          const img = await user.related('images').create({ 'name': fileData.name, 'url': url, 'font': fileData.font, 'year': fileData.year })
-          //criar log de imagem criada
-          await user.related('logs').create({ type: 'image', action: 'create', message: `${user.name} criou uma imagem`, 'imageId': img.id })
-        })
-      }
-    })
+    // await fs.readFile(`${Application.tmpPath('uploads')}/${filePath}`, async (error, data) => {
+    //   if (error) {
+    //     return response.json({ 'error': 'Erro no cadastro do arquivo' })
+    //   } else {
+    //     //mandar para o s3 da amazon
+    //     await s3.put(filePath, data).then(async () => {
+    //       const url = await s3.getUrl(filePath)
+    //       const img = await user.related('images').create({ 'name': fileData.name, 'url': url, 'font': fileData.font, 'year': fileData.year })
+    //       //criar log de imagem criada
+    //       await user.related('logs').create({ type: 'image', action: 'create', message: `${user.name} criou uma imagem`, 'imageId': img.id })
+    //     })
+    //   }
+    // })
 
     session.flash('errors', { "success": `Imagem enviada com sucesso` })
     session.flashAll()
