@@ -20,7 +20,7 @@ Route.group(() => {
   Route.get('/users', 'AuthController.list').as('auth.list')
   Route.get('/users/:id/edit', 'AuthController.edit').as('auth.edit')
   Route.post('/users/:id/edit', 'AuthController.update').as('auth.update')
-  Route.get('/user/:id', 'AuthController.show').as('auth.show')
+
 
   Route.get('/posts', 'PostsController.list').as('post.list')
   Route.get('/posts/:id/edit', 'PostsController.edit').as('post.edit')
@@ -37,8 +37,13 @@ Route.group(() => {
 
   Route.get('/logs', 'LogsController.index').as('log.index')
 
+  Route.get('/tags/create', 'TagsController.create').as('tags.create')
+  Route.post('/tags/create', 'TagsController.store').as('tags.store')
+
 
 }).middleware('auth')
+
+Route.get('/user/:id', 'AuthController.show').as('auth.show')
 
 Route.get('/images', 'ImagesController.index').as('image.index')
 Route.post('/images', 'ImagesController.search').as('image.search')

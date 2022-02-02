@@ -6,6 +6,8 @@ import PostHasImage from 'App/Models/PostHasImage'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import Image from 'App/Models/Image'
+import Tag from 'App/Models/Tag'
+import UserImageHasTag from 'App/Models/UserImageHasTag'
 
 export default class ImagesController {
   public async index({ view }: HttpContextContract) {
@@ -16,7 +18,10 @@ export default class ImagesController {
   }
 
   public async create({ view }: HttpContextContract) {
-    return view.render('image/create')
+
+    const tags = await Tag.query()
+
+    return view.render('image/create', { tags })
   }
 
   public async search({ view, request }: HttpContextContract) {
@@ -47,6 +52,19 @@ export default class ImagesController {
     var file = request.file('image')
     var fileData = request.only(['name', 'font', 'city', 'neighborhood', 'street', 'year', 'date'])
 
+    var tags: Array<number> = []
+
+    const allTags = await Tag.query()
+
+    for (let i = 0; i < allTags.length; i++) {
+      const tag = request.only([`tag-${i + 1}`])
+      console.log(tag);
+
+      if (tag[`tag-${i + 1}`]) {
+        tags.push(i + 1)
+      }
+    }
+
     //verificar dados
     if (!file || !user) {
       session.flash('errors', { "success": `Erro ao enviar arquivo` })
@@ -58,6 +76,8 @@ export default class ImagesController {
       return response.redirect().back()
     }
 
+
+
     //usar o serviço s3 da amazon (TODO: mudar para serviço local)
     // const s3 = Drive.use('s3')
 
@@ -67,6 +87,13 @@ export default class ImagesController {
     //mandar o arquivo para a pasta uploads
     await file.moveToDisk('./', { name: filePath }).then(async () => {
       const img = await user.related('images').create({ 'name': fileData.name, 'path': filePath, 'font': fileData.font, 'year': fileData.year, 'city': fileData.city, 'neighborhood': fileData.neighborhood, 'street': fileData.street, 'date': fileData.date })
+
+      await tags.forEach(async (id) => {
+        await UserImageHasTag.create({
+          imageId: img.id,
+          tagId: id
+        })
+      })
       //criar log de imagem criada
       await user.related('logs').create({ type: 'image', action: 'create', message: `${user.name} criou uma imagem`, 'imageId': img.id })
     })

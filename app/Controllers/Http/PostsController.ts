@@ -2,7 +2,9 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Image from 'App/Models/Image';
 import Post from 'App/Models/Post';
 import PostHasImage from 'App/Models/PostHasImage';
+import Tag from 'App/Models/Tag';
 import User from 'App/Models/User';
+import UserImageHasTag from 'App/Models/UserImageHasTag';
 
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
@@ -19,9 +21,11 @@ export default class PostsController {
       return response.redirect().back()
     }
 
-    const images = await Image.query()
+    const images = await Image.query().where('is_deleted', false)
 
-    return view.render('post/create', { images })
+    const tags = await Tag.query()
+
+    return view.render('post/create', { images, tags })
   }
 
   public async show({ view, params }: HttpContextContract) {
@@ -43,17 +47,33 @@ export default class PostsController {
   public async store({ request, response, auth, session }: HttpContextContract) {
     const user = auth.user
 
+    var tags: Array<number> = []
+
+    const allTags = await Tag.query()
+
+    for (let i = 0; i < allTags.length; i++) {
+      const tag = request.only([`tag-${i + 1}`])
+      console.log(tag);
+
+      if (tag[`tag-${i + 1}`]) {
+        tags.push(i + 1)
+      }
+    }
+
     if (!user) {
       session.flash('errors', { "success": `Acesso negado` })
       session.flashAll()
       return response.redirect().back()
     }
 
+
     const data = request.only(['title', 'text', 'images', 'description'])
 
-    if (!this.validateCreatePost(data, session)) {
+    if (!this.validateCreatePost(data, session, tags)) {
       return response.redirect().back()
     }
+
+
 
     var imagesId = data.images.split(',')
 
@@ -63,6 +83,13 @@ export default class PostsController {
       await PostHasImage.create({
         postId: post.id,
         imageId: id
+      })
+    })
+
+    await tags.forEach(async (id) => {
+      await UserImageHasTag.create({
+        postId: post.id,
+        tagId: id
       })
     })
 
@@ -162,15 +189,23 @@ export default class PostsController {
     return response.redirect().toRoute('post.list')
   }
 
-  private validateCreatePost(data, session): Boolean {
+  private validateCreatePost(data, session, tags): Boolean {
     const errors = {}
 
     if (!data.title) {
       this.registerError(errors, 'title', 'Campo obrigatório')
     }
 
+    if (tags.length <= 0) {
+      this.registerError(errors, 'tags', 'Campo obrigatório, selecione ao menos uma tag')
+    }
+
     if (!data.text) {
       this.registerError(errors, 'text', 'Campo obrigatório')
+    }
+
+    if (!data.description) {
+      this.registerError(errors, 'description', 'Campo obrigatório')
     }
 
     if (!data.images) {

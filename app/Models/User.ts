@@ -10,6 +10,7 @@ import {
 import Image from './Image'
 import Post from './Post'
 import Log from './Log'
+import Tag from './Tag'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -63,4 +64,5 @@ export default class User extends BaseModel {
 
   @hasMany(() => Log)
   public logs: HasMany<typeof Log>
+
 }

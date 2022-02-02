@@ -1,0 +1,66 @@
+@layout('layouts/main')
+@set('title', 'Registrar - Acervo Digital')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, registrar nova conta" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+  <style>
+    .step {
+      display: flex;
+      align-items: center;
+    }
+
+    .step div {
+      height: 40px;
+      width: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 50%;
+      background-color: #333333;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .step p {
+      font-weight: bold;
+    }
+    </style>
+@endsection
+
+@section('content') 
+@!component('components/nav')
+<div class="container">
+    <form action="{{route('tags.store')}}" method="POST" class="p-3" enctype="multipart/form-data">
+      {{ csrfField() }}
+      <!-- 1º passo : documento -->
+      <div class="step my-2">
+        <div>
+          <span>1</span>
+        </div>
+        <p class="m-0 p-1">
+          O nome da tag.
+        </p>
+      </div>
+  
+
+      <!--- nome -->
+      <div class="form-floating my-3"> 
+        <input type="text" class="form-control" name="name" id="name" placeholder="Nome" value="{{flashMessages.get('name') || ''}}">
+        <label for="name">Nome</label>
+        @if(flashMessages.get('errors.name'))
+        <div class="invalid-feedback d-block">
+          {{flashMessages.get('errors.name')}}
+        </div>
+        @else
+          <div class="form-text">
+            Campo obrigatório
+          </div>
+        @endif
+      </div>
+      <button type="submit" class="w-100 btn btn-success">Enviar</button>
+    </form>
+  </div>
+@endsection
