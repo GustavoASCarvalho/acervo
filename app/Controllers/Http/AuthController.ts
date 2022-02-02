@@ -3,8 +3,39 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import User from 'App/Models/User'
 import Application from '@ioc:Adonis/Core/Application'
 import fs from 'fs'
+import Image from 'App/Models/Image'
+import Post from 'App/Models/Post'
+
+import { format } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+
 
 export default class AuthController {
+
+  public async show({ view, params }: HttpContextContract) {
+
+    const user = await User.query().where('id', params.id).firstOrFail()
+
+    var userImages
+    var userPosts
+
+    userImages = await Image.query().where('user_id', user.id).orderBy('created_at', 'desc')
+    userPosts = await Post.query().where('user_id', user.id).orderBy('created_at', 'desc')
+
+    if (userImages) {
+      userImages.forEach((img) => {
+        img['data'] = format(Number(img.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+      })
+    }
+
+    if (userPosts) {
+      userPosts.forEach((post) => {
+        post['data'] = format(Number(post.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
+      })
+    }
+
+    return view.render('auth/show', { user, userImages, userPosts })
+  }
 
   public async list({ view, auth }: HttpContextContract) {
     const user = await auth.user

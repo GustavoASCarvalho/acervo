@@ -152,8 +152,23 @@
         </div>
 
         <div class="form-floating my-3">
-          <textarea class="form-control" placeholder="Descrição" id="text" name="text" style="min-height: 200px">{{flashMessages.get('text') || ''}}</textarea>
-          <label for="text">Descrição</label>
+          <textarea class="form-control" placeholder="Descrição" id="description" name="description" style="min-height: 200px">{{flashMessages.get('description') || ''}}</textarea>
+          <label for="description">Breve descrição</label>
+          
+          @if(flashMessages.get('errors.description'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.description')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
+        </div>
+
+        <div class="form-floating my-3">
+          <textarea class="form-control" placeholder="text" id="text" name="text" style="min-height: 200px">{{flashMessages.get('text') || ''}}</textarea>
+          <label for="text">Texto</label>
           
           @if(flashMessages.get('errors.text'))
             <div class="invalid-feedback d-block">
@@ -165,6 +180,7 @@
             </div>
           @endif
         </div>
+
         <div class="step my-2">
           <div>
             <span>2</span>

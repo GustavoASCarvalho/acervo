@@ -9,6 +9,7 @@ export default class Posts extends BaseSchema {
       table.integer('user_id').references('id').inTable('users').notNullable()
       table.string('title').notNullable()
       table.text('description').notNullable()
+      table.text('text').notNullable()
       table.integer('views').nullable().defaultTo(0)
       table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at', { useTz: true })

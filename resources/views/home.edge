@@ -41,13 +41,14 @@
     <div class="timeline">
       <ul id="post_list">
         @each(post in posts)
-          <li class="post_item">
-            <div class="timeline-content">
-              <h3 class="date">{{post.data}}</h3>
-              <h1>{{post.title}}</h1>
-              <p>{{post.description}}</p>
-            </div>
-          </li>  
+            <li class="post_item">
+                <div class="timeline-content">
+                  <h3 class="date">{{post.data}}</h3>
+                  <h1>{{post.title}}</h1>
+                  <p>{{post.description}}</p>
+                </div>
+                <a href="{{route('post.show', {id: post.id})}}" class="stretched-link"></a>
+            </li>  
         @endeach
       </ul>
     </div>

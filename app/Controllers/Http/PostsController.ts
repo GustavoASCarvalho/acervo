@@ -24,6 +24,22 @@ export default class PostsController {
     return view.render('post/create', { images })
   }
 
+  public async show({ view, params }: HttpContextContract) {
+    const post = await Post.query().where('id', params.id).firstOrFail()
+    const postHasImage = await PostHasImage.query().where('postId', params.id)
+
+    var images: Array<Image> = []
+
+    for (let i = 0; i < postHasImage.length; i++) {
+      const image = await Image.query().where('id', postHasImage[i].imageId).firstOrFail()
+      image['indice'] = i
+      images.push(image)
+
+    }
+
+    return view.render('post/show', { post, images })
+  }
+
   public async store({ request, response, auth, session }: HttpContextContract) {
     const user = auth.user
 
@@ -33,7 +49,7 @@ export default class PostsController {
       return response.redirect().back()
     }
 
-    const data = request.only(['title', 'text', 'images'])
+    const data = request.only(['title', 'text', 'images', 'description'])
 
     if (!this.validateCreatePost(data, session)) {
       return response.redirect().back()
@@ -41,7 +57,7 @@ export default class PostsController {
 
     var imagesId = data.images.split(',')
 
-    const post = await Post.create({ 'userId': user?.id, 'title': data.title, 'description': data.text })
+    const post = await Post.create({ 'userId': user?.id, 'title': data.title, 'description': data.description, 'text': data.text })
 
     await imagesId.forEach(async (id) => {
       await PostHasImage.create({
@@ -90,12 +106,13 @@ export default class PostsController {
   }
 
   public async update({ request, params, session, response, auth }: HttpContextContract) {
-    const data = request.only(['title', 'description'])
+    const data = request.only(['title', 'description', 'text'])
 
     const post = await Post.query().where('id', params.id).firstOrFail()
 
     post.title = data.title
     post.description = data.description
+    post.text = data.text
 
     await post.save()
 

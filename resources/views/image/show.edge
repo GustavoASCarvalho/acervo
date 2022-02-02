@@ -24,6 +24,7 @@
             <div class="img-box" style="width: 100%;">
                 <a href="/uploads/{{image.path}}" download="{{image.name}}" target="_blank"><img src="/uploads/{{image.path}}" alt="{{image.name}}"></a>
             </div>
+            <span class="fs-6"><b>Cadastrada por:</b> <a href="{{route('auth.show', { id: user.id})}}">{{user.name}}</a></span>
             <span class="fs-6"><b>Nome:</b> {{image.name}}</span>
             <span class="fs-6"><b>Fonte:</b> {{image.font || 'sem fonte'}}</span>
             @if(image.year)

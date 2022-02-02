@@ -2,7 +2,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Post from 'App/Models/Post'
 import User from 'App/Models/User'
 import PostHasImage from 'App/Models/PostHasImage'
-import Drive from '@ioc:Adonis/Core/Drive'
 
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
@@ -99,6 +98,7 @@ export default class ImagesController {
     if (image.date) {
       image['data'] = format(Number(image.date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
     }
+
 
     //verificar se imagem não foi excluida
     if (image.isDeleted) {

@@ -18,6 +18,9 @@ export default class Post extends BaseModel {
   public description: string
 
   @column()
+  public text: string
+
+  @column()
   public isDeleted: boolean
 
   @column.dateTime({ autoCreate: true })

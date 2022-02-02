@@ -1,0 +1,52 @@
+@layout('layouts/main')
+@set('title', 'Editar usuarios - Acervo Digital')
+
+@section('meta')
+  <meta name="description" content="Acervo Digital de Paranaguá, Editar usuarios" />
+  @entryPointScripts('nav')
+  @entryPointStyles('nav')
+
+  <style>
+      
+      .card img {
+        width: 100%;
+        height: 300px;
+        object-fit: scale-down;
+      }
+
+      .lead {
+          text-align: justify;
+      }
+  </style>
+@endsection
+
+@section('content')
+@!component('components/nav')
+<main>
+    <section class="py-5 text-center container">
+      <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light">{{post.title}}</h1>
+          <p class="lead text-muted">{{post.text}}</p>
+        </div>
+      </div>
+    </section>
+  
+    <div class="album py-5 bg-light">
+      <div class="container">
+  
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            @each(image in images)
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="/uploads/{{image.path}}" alt="{{image.name}}">
+                </div>
+            </div>
+            @endeach
+        </div>
+      </div>
+    </div>
+  </main>
+
+@!component('components/footer')
+@endsection
