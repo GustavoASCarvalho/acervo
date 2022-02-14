@@ -72,17 +72,16 @@ export default class ImagesController {
       return response.redirect().back()
     }
 
-    if (!this.validateImage(fileData, session)) {
+    if (!this.validateImage(fileData, session, tags)) {
       return response.redirect().back()
     }
-
-
 
     //usar o serviço s3 da amazon (TODO: mudar para serviço local)
     // const s3 = Drive.use('s3')
 
     //criar um nome unico para o arquivo
-    const filePath = `${Date.now()}-${file?.clientName}`
+
+    const filePath = `${Date.now()}-${file.size}`
 
     //mandar o arquivo para a pasta uploads
     await file.moveToDisk('./', { name: filePath }).then(async () => {
@@ -187,10 +186,26 @@ export default class ImagesController {
     const user = await auth.user
     const image = await Image.query().where('id', params.id).firstOrFail()
 
+    var tags: Array<number> = []
+
+    const allTags = await Tag.query()
+
+    for (let i = 0; i < allTags.length; i++) {
+      const tag = request.only([`tag-${i + 1}`])
+      console.log(tag);
+
+      if (tag[`tag-${i + 1}`]) {
+        tags.push(i + 1)
+      }
+    }
+
+
     if (user?.isAdmin || user?.id === image.userId) {
-      if (!this.validateImage(data, session)) {
+      if (!this.validateImage(data, session, tags)) {
         return response.redirect().back()
       }
+
+
 
       image.name = data.name
       image.font = data.font
@@ -234,8 +249,13 @@ export default class ImagesController {
     }
   }
 
-  private validateImage(data, session): Boolean {
+  private validateImage(data, session, tags): Boolean {
     const errors = {}
+
+    if (tags.length === 0) {
+      this.registerError(errors, 'tags', 'Selecione pelo menos uma tag')
+    }
+
 
     if (!data.name) {
       this.registerError(errors, 'name', 'Campo obrigatório')
