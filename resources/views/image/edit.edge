@@ -7,6 +7,30 @@
   @entryPointStyles('nav')
   @entryPointScripts('image')
   @entryPointStyles('image')
+
+  <style>
+    .step {
+      display: flex;
+      align-items: center;
+    }
+
+    .step div {
+      height: 40px;
+      width: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 50%;
+      background-color: #333333;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .step p {
+      font-weight: bold;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -17,6 +41,15 @@
         <div class="d-flex align-items-center justify-content-center">
             <img src="/uploads/{{image.path}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
         </div>
+        <div class="step my-2">
+          <div>
+            <span>1</span>
+          </div>
+          <p class="m-0 p-1">
+            Nome do documento
+          </p>
+        </div>
+        <!--- nome -->
         <div class="form-floating my-3"> 
           <input type="text" class="form-control" name="name" id="name" placeholder="Nome" value="{{image.name || ''}}">
           <label for="name">Nome</label>
@@ -30,48 +63,110 @@
             </div>
           @endif
         </div>
-        
+
+        <div class="step my-2">
+          <div>
+            <span>2</span>
+          </div>
+          <p class="m-0 p-1">
+            Tags e palavras chaves
+          </p>
+        </div>
+
+        <div class="d-flex flex-row">
+          @each(tag in tags)
+            <div class="form-check m-2">
+              @if(tag.checked)
+                <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault" name="tag-{{tag.id}}" checked>
+              @else
+                <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault" name="tag-{{tag.id}}">
+              @endif
+              <label class="form-check-label" for="flexCheckDefault">
+                {{tag.tag}}
+              </label>
+            </div>
+          @endeach
+        </div>
+        @if(flashMessages.get('errors.tags'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.tags')}}
+          </div>
+        @else
+          <div class="form-text">
+            Campo obrigatório
+          </div>
+        @endif
+
+        <div class="step my-2">
+          <div>
+            <span>3</span>
+          </div>
+          <p class="m-0 p-1">
+            Informações adicionais a respeito do documento.
+          </p>
+        </div>
+        <div class="form-text">
+          <span class="fw-bold text-danger">Atenção!</span>
+          <p class="m-0">As informações a seguir não são obrigatórias.</p>
+        </div>
         <!--- font -->
         <div class="form-floating my-3">
           <input type="text" class="form-control" name="font" id="font" placeholder="Fonte da imagem" value="{{image.font || ''}}">
           <label for="font">Fonte</label>
           @if(flashMessages.get('errors.font'))
-            <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.font')}}
-            </div> 
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.font')}}
+          </div>
+          @else
+            <div class="form-text">
+              Sabe quem tirou essa foto ?
+            </div>
           @endif
         </div>
         <!--endereço-->
         <div class="form-floating my-3">
-          <input type="text" class="form-control" name="city" id="city" placeholder="Cidade" value="{{image.city || ''}}">
+          <input type="text" class="form-control" name="city" id="city" placeholder="Cidade" value="{{image.city || 'Paranaguá'}}">
           <label for="city">Cidade</label>
-          @if(flashMessages.get('errors.city'))
-            <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.city')}}
-            </div>
-          @endif
-        </div>
-    
-        <div class="form-floating my-3">
-          <input type="text" class="form-control" name="neighborhood" id="neighborhood" placeholder="Bairro" value="{{image.neighborhood || ''}}">
-          <label for="neighborhood">Bairro</label>
-          @if(flashMessages.get('errors.neighborhood'))
-            <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.neighborhood')}}
-            </div>
-          @endif
-        </div>
-    
-        <div class="form-floating my-3">
-          <input type="text" class="form-control" name="street" id="street" placeholder="Rua" value="{{image.street || ''}}">
-          <label for="street">Rua</label>
-          @if(flashMessages.get('errors.street'))
-            <div class="invalid-feedback d-block">
-              {{flashMessages.get('errors.street')}}
+          @if(flashMessages.get('errors.font'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.font')}}
+          </div>
+          @else
+            <div class="form-text">
+              Sabe em que cidade essa foto foi tirada ?
             </div>
           @endif
         </div>
 
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="neighborhood" id="neighborhood" placeholder="Bairro" value="{{image.neighborhood || ''}}">
+          <label for="neighborhood">Bairro</label>
+          @if(flashMessages.get('errors.font'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.font')}}
+          </div>
+          @else
+            <div class="form-text">
+              Sabe em que bairro essa foto foi tirada ?
+            </div>
+          @endif
+        </div>
+
+        <div class="form-floating my-3">
+          <input type="text" class="form-control" name="street" id="street" placeholder="Rua" value="{{image.street || ''}}">
+          <label for="street">Rua</label>
+          @if(flashMessages.get('errors.font'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.font')}}
+          </div>
+          @else
+            <div class="form-text">
+              Sabe em que rua essa foto foi tirada ?
+            </div>
+          @endif
+        </div>
+
+        <!--- ano -->
         <div class="form-floating my-3">
           <input type="number" class="form-control" name="year" id="year" placeholder="Ano" value="{{image.year || ''}}">
           <label for="year">Ano</label>
@@ -95,7 +190,7 @@
             </div>
           @endif
         </div>
-
+      
         <button type="submit" class="btn btn-dark">Atualizar</button>
         <a href="{{route('image.delete', {id: image.id})}}"><button type="button" class="btn btn-danger">Excluir</button></a>
     </form>  

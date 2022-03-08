@@ -171,9 +171,19 @@ export default class ImagesController {
   public async edit({ view, params, auth, response, session }: HttpContextContract) {
     const image = await Image.query().where('id', params.id).firstOrFail()
     const user = await auth.user
+    const tags = await Tag.query()
+    const imageTags = await UserImageHasTag.query().where('image_id', params.id)
+
+    tags.forEach(async tag => {
+      imageTags.forEach(async imageTag => {
+        if (tag.id === imageTag.tagId) {
+          tag['checked'] = true
+        }
+      })
+    })
 
     if (user?.isAdmin || user?.id === image.userId) {
-      return view.render('image/edit', { image })
+      return view.render('image/edit', { image, tags })
     } else {
       session.flash('errors', { "success": `Acesso negado` })
       session.flashAll()
@@ -190,22 +200,30 @@ export default class ImagesController {
 
     const allTags = await Tag.query()
 
-    for (let i = 0; i < allTags.length; i++) {
-      const tag = request.only([`tag-${i + 1}`])
-      console.log(tag);
-
-      if (tag[`tag-${i + 1}`]) {
-        tags.push(i + 1)
+    allTags.forEach(async tag => {
+      var tagId = request.only([`tag-${tag.id}`])
+      if (tagId[`tag-${tag.id}`]) {
+        tags.push(tag.id)
       }
-    }
-
+    })
 
     if (user?.isAdmin || user?.id === image.userId) {
       if (!this.validateImage(data, session, tags)) {
         return response.redirect().back()
       }
 
+      var imageTags = await UserImageHasTag.query().where('image_id', image.id)
 
+      await imageTags.forEach(async imageTag => {
+        await imageTag.delete()
+      })
+
+      await tags.forEach(async (id) => {
+        await UserImageHasTag.create({
+          imageId: image.id,
+          tagId: id
+        })
+      })
 
       image.name = data.name
       image.font = data.font
