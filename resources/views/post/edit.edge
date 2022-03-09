@@ -7,6 +7,112 @@
   @entryPointStyles('post')
   @entryPointScripts('nav')
   @entryPointStyles('nav')
+
+  <style>
+    .step {
+      display: flex;
+      align-items: center;
+    }
+
+    .step div {
+      height: 40px;
+      width: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 50%;
+      background-color: #333333;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .step p {
+      font-weight: bold;
+    }
+    
+    #box {
+      height: 100px;
+      width: 100px;
+      border-radius: 1rem;
+      border: 1px dashed #c3c3c3;
+      transition: .3s all;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #c3c3c3;
+    }
+
+    #box:hover {
+      background: #727272;
+      cursor: pointer;
+    }
+
+    .box {
+      height: 100px;
+      width: 100px;
+      border-radius: 1rem;
+    }
+
+    .card {
+      border: 1px solid gray;
+    }
+
+    .card:hover {
+      box-shadow: none;
+        transform: scale(1.02);
+    }
+
+    .card img {
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .model {
+    display: none;
+    position: fixed;
+    z-index: 1031;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */  
+    }
+
+    .model-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      border: none;
+      padding: 20px;
+      width: 80%;
+      min-height: 536px;
+      box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 15px;
+    }
+    .img-box-list {
+      height: 100px;
+      width: 100px;
+      border-radius: 1rem;
+      padding: 0;
+    }
+
+    .img-box-list img {
+      height: 100px;
+      width: 100px;
+      border-radius: 1rem;
+    }
+    .img-box-list img:hover {
+      /*filtro vermelho*/
+      filter: grayscale(100%);
+      transition: .2s all;
+    }
+
+  </style>
 @endsection
 
 @section('content') 
@@ -14,13 +120,25 @@
 <div style="height: 20px"></div>
 <div class="container">
   
-    <form action="{{ route('post.update', {id: post.id }) }}" method="post">
-        {{ csrfField() }}
-        
-        
-        <h3 class="text-center">Atualizar publicação</h3>
+  <form action="{{ route('post.update', { id: post.id }) }}" method="post">
+    {{ csrfField() }}
+    <input type="hidden" name="images">
+    <div class="row">
+      <div class="col-12">
+        <div class="step my-2">
+          <div>
+            <span>1</span>
+          </div>
+          <p class="m-0 p-1">
+            Informações básicas
+          </p>
+        </div>
+        <div class="form-text">
+          <span class="fw-bold text-danger">Atenção!</span>
+          <p class="m-0 mb-2">Todos os campos abaixo são obrigatórios</p>
+        </div>
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" name="title" id="title" placeholder="Titulo" autofocus value="{{flashMessages.get('title') || post.title}}">
+          <input type="text" class="form-control" name="title" id="title" placeholder="Titulo" autofocus value="{{post.title || ''}}">
           <label for="title">Titulo</label>
           @if(flashMessages.get('errors.title'))
             <div class="invalid-feedback d-block">
@@ -34,8 +152,8 @@
         </div>
 
         <div class="form-floating my-3">
-          <textarea class="form-control" placeholder="Descrição" id="description" name="description" style="min-height: 200px">{{flashMessages.get('description') || post.description }}</textarea>
-          <label for="description">Descrição</label>
+          <textarea class="form-control" placeholder="Descrição" id="description" name="description" style="min-height: 100px">{{post.description || ''}}</textarea>
+          <label for="description">Breve descrição</label>
           
           @if(flashMessages.get('errors.description'))
             <div class="invalid-feedback d-block">
@@ -47,10 +165,250 @@
             </div>
           @endif
         </div>
+
+        <div class="form-floating my-3">
+          <textarea class="form-control" placeholder="text" id="text" name="text" style="min-height: 400px">{{post.text || ''}}</textarea>
+          <label for="text">Texto</label>
           
-        <button class="btn btn-dark my-5" type="submit">Atualizar</button>
-        <a href="{{route('post.delete', {id: post.id})}}"><button class="btn btn-danger" type="button">Deletar</button></a>
-    </form>
+          @if(flashMessages.get('errors.text'))
+            <div class="invalid-feedback d-block">
+              {{flashMessages.get('errors.text')}}
+            </div>
+          @else
+            <div class="form-text">
+              Campo obrigatório
+            </div>
+          @endif
+        </div>
+
+        <div class="step my-2">
+          <div>
+            <span>2</span>
+          </div>
+          <p class="m-0 p-1">
+            Selecione tags e palavras chaves
+          </p>
+        </div>
+
+        <div class="d-flex flex-row">
+          @each(tag in tags)
+            <div class="form-check m-2">
+              @if(tag.checked)
+                <input class="form-check-input" type="checkbox" value="true" id="tag-{{tag.id}}" name="tag-{{tag.id}}" checked>
+              @else
+                <input class="form-check-input" type="checkbox" value="true" id="tag-{{tag.id}}" name="tag-{{tag.id}}">
+              @endif
+              
+              <label class="form-check-label" for="tag-{{tag.id}}">
+                {{tag.tag}}
+              </label>
+            </div>
+          @endeach
+        </div>
+        @if(flashMessages.get('errors.tags'))
+          <div class="invalid-feedback d-block">
+            {{flashMessages.get('errors.tags')}}
+          </div>
+        @else
+          <div class="form-text">
+            Campo obrigatório
+          </div>
+        @endif
+
+        <div class="step my-2">
+          <div>
+            <span>3</span>
+          </div>
+          <p class="m-0 p-1">
+            Documentos e imagens
+          </p>
+        </div>
+        <div class="form-text">
+          <span class="fw-bold text-danger">Atenção!</span>
+          <p class="m-0">Você deve selecionar ao menos 1 arquivo.</p>
+        </div>
+        @if(flashMessages.get('errors.images'))
+        <div class="invalid-feedback d-block">
+          {{flashMessages.get('errors.images')}}
+        </div>
+        @endif
+        <div id="image-box" class="my-3 row">
+          <div id="box" class="m-1">
+            <i class="bi bi-plus-lg"></i>
+          </div>
+        </div>
+       
+        <div class="model">
+          <div class="model-content">
+            <div class="d-flex">
+              <button type="button" class="btn btn-dark me-2" id="closeModal">X</button>
+              <input type="text" id="busca" placeholder="pesquisar..." class="w-100">
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5" id="grid">
+              @each(image in images)
+                <div class="col">
+                  <div class="card card-hover m-2 img-box">
+                    <img src="/uploads/{{image.path}}" alt="{{image.name}}" aria-valuetext="{{image.id}}" data-checked="{{image.checked || false}}">
+                  </div>
+                </div>
+              @endeach
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="w-100 btn btn-success mb-5" type="submit">Atualizar</button>
+
+  </form>
 </div>
 
+<script>
+  var imageBox = document.getElementById('image-box');
+  var box = document.getElementById('box');
+  var model = document.querySelector('.model');
+  var busca = document.getElementById('busca');
+  var imgBox = document.querySelectorAll('.img-box');
+  var closeModal = document.getElementById('closeModal');
+
+  var ids = [];
+  var images = [];
+  
+  window.onload = function() {
+    for(var i = 0; i < imgBox.length; i++) {
+      var img = imgBox[i].querySelector('img')
+      if (img.getAttribute('data-checked') == 'true') {
+      
+        var id = img.getAttribute('aria-valuetext');
+        var url = img.getAttribute('src');
+        var name = img.getAttribute('alt');
+        var checked = img.getAttribute('data-checked');
+
+        var image = {
+          id: id,
+          url: url,
+          name: name,
+          checked: checked
+        };
+
+        images.push(image);
+        ids = [];
+        images.forEach((image)=> {
+          ids.push(image.id);
+        });
+        document.querySelector('input[name="images"]').value = ids
+
+        recriar(images);
+      } 
+    }
+  }
+
+  busca.addEventListener('keyup', function(e){
+    var value = e.target.value.toLocaleLowerCase();
+    
+    for(var i = 0; i < imgBox.length; i++){
+      var img = imgBox[i].querySelector('img');
+      var text = img.getAttribute('alt').toLocaleLowerCase();
+      if(text.indexOf(value) == -1){
+        imgBox[i].style.display = 'none';
+      }else{
+        imgBox[i].style.display = 'block';
+      }
+    }
+  });
+
+  closeModal.addEventListener('click', function(){
+    model.style.display = 'none';
+    document.documentElement.style.overflow = 'auto';
+  });
+
+  for(var i = 0; i < imgBox.length; i++){
+    imgBox[i].addEventListener('click', function(e){
+      console.log(e.target.getAttribute('aria-valuetext'));
+      
+      var verif = 0;
+      for(var i = 0; i < images.length; i++){
+          if(images[i].id == e.target.getAttribute('aria-valuetext')){
+          verif = 1;
+        }
+      }
+
+      if (verif == 0) {
+        var img = e.target;
+        var id = img.getAttribute('aria-valuetext');
+        var url = img.getAttribute('src');
+        var name = img.getAttribute('alt');
+        var checked = img.getAttribute('data-checked');
+
+        var image = {
+          id: id,
+          url: url,
+          name: name,
+          checked: checked
+        };
+
+        images.push(image);
+        ids = [];
+        images.forEach((image)=> {
+          ids.push(image.id);
+        });
+        document.querySelector('input[name="images"]').value = ids
+
+        recriar(images);
+
+        model.style.display = 'none';
+        document.documentElement.style.overflow = 'auto';
+      }
+    });
+  }
+
+  imageBox.addEventListener('click', (e)=> {
+    images.forEach((image)=> {
+      if (e.target.getAttribute('aria-valuetext') == image.id) {
+        images = images.filter((image)=> {
+          return image.id != e.target.getAttribute('aria-valuetext');
+        });
+        //criar um array com os id das imagens
+        ids = [];
+        images.forEach((image)=> {
+          ids.push(image.id);
+        });
+
+        document.querySelector('input[name="images"]').value = ids;
+        recriar(images);
+      }
+    })
+  })
+
+  recriar = (images) => {
+    console.log(images);
+    console.log(ids);
+    imageBox.innerHTML = '';
+    imageBox.appendChild(box);
+    images.forEach(image => {
+      var div = document.createElement('div');
+        div.classList.add('img-box-list');
+        div.classList.add('m-1');
+        div.classList.add('p-0');
+        div.innerHTML = `
+          <a>
+            <img src="${image.url}" alt="${image.name}" aria-valuetext="${image.id}">
+          </a>
+        `;
+        imageBox.appendChild(div);
+    });
+  }
+
+  box.addEventListener('click', function() {
+    model.style.display = 'block';
+    document.documentElement.style.overflow = 'hidden';
+  });
+
+  window.onclick = function(event) {
+    if (event.target == model) {
+      model.style.display = 'none';
+      document.documentElement.style.overflow = 'auto';
+    }
+  }
+</script>
 @endsection

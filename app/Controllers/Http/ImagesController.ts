@@ -112,9 +112,11 @@ export default class ImagesController {
     //   }
     // })
 
+    //clear session flash
+
     session.flash('errors', { "success": `Imagem enviada com sucesso` })
     session.flashAll()
-    return response.redirect().back()
+    return response.redirect('/images')
   }
 
   public async show({ view, params, response, session }: HttpContextContract) {
