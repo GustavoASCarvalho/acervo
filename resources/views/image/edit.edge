@@ -39,7 +39,7 @@
     <form action="{{route('image.update', {id: image.id})}}" method="POST" class="p-3">
         {{ csrfField() }}
         <div class="d-flex align-items-center justify-content-center">
-            <img src="/uploads/{{image.path}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
+            <img src="{{image.url}}" class="p-1 img-fluid" alt="{{image.name}}" style="max-width: 400px;">
         </div>
         <div class="step my-2">
           <div>
@@ -50,7 +50,7 @@
           </p>
         </div>
         <!--- nome -->
-        <div class="form-floating my-3"> 
+        <div class="form-floating my-3">
           <input type="text" class="form-control" name="name" id="name" placeholder="Nome" value="{{image.name || ''}}">
           <label for="name">Nome</label>
           @if(flashMessages.get('errors.name'))
@@ -176,7 +176,7 @@
             </div>
           @endif
         </div>
-        
+
         <div class="form-floating my-3">
           @if(image.data)
             <input type="date" class="form-control" name="date" id="date" placeholder="Data" value="{{image.date.toLocaleDateString().split("/").reverse().join("-")}}">
@@ -190,10 +190,10 @@
             </div>
           @endif
         </div>
-      
+
         <button type="submit" class="btn btn-dark">Atualizar</button>
         <a href="{{route('image.delete', {id: image.id})}}"><button type="button" class="btn btn-danger">Excluir</button></a>
-    </form>  
+    </form>
 </div>
 
 <script>

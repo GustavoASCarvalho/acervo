@@ -25,7 +25,7 @@
         <div class="col">
           <div class="card card-hover m-2">
             <a href="{{route('image.show', {id: image.id})}}">
-              <img src="/uploads/{{image.path}}" alt="{{image.name}}">
+              <img src="{{image.url}}" alt="{{image.name}}">
             </a>
             <div class="card-body p-2">
               <p class="card-text m-0">{{image.name}}</p>

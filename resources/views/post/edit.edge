@@ -30,7 +30,7 @@
     .step p {
       font-weight: bold;
     }
-    
+
     #box {
       height: 100px;
       width: 100px;
@@ -81,7 +81,7 @@
     height: 100%;
     overflow: auto;
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */  
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     }
 
     .model-content {
@@ -115,11 +115,11 @@
   </style>
 @endsection
 
-@section('content') 
+@section('content')
 @!component('components/nav')
 <div style="height: 20px"></div>
 <div class="container">
-  
+
   <form action="{{ route('post.update', { id: post.id }) }}" method="post">
     {{ csrfField() }}
     <input type="hidden" name="images">
@@ -154,7 +154,7 @@
         <div class="form-floating my-3">
           <textarea class="form-control" placeholder="Descrição" id="description" name="description" style="min-height: 100px">{{post.description || ''}}</textarea>
           <label for="description">Breve descrição</label>
-          
+
           @if(flashMessages.get('errors.description'))
             <div class="invalid-feedback d-block">
               {{flashMessages.get('errors.description')}}
@@ -169,7 +169,7 @@
         <div class="form-floating my-3">
           <textarea class="form-control" placeholder="text" id="text" name="text" style="min-height: 400px">{{post.text || ''}}</textarea>
           <label for="text">Texto</label>
-          
+
           @if(flashMessages.get('errors.text'))
             <div class="invalid-feedback d-block">
               {{flashMessages.get('errors.text')}}
@@ -198,7 +198,7 @@
               @else
                 <input class="form-check-input" type="checkbox" value="true" id="tag-{{tag.id}}" name="tag-{{tag.id}}">
               @endif
-              
+
               <label class="form-check-label" for="tag-{{tag.id}}">
                 {{tag.tag}}
               </label>
@@ -237,7 +237,7 @@
             <i class="bi bi-plus-lg"></i>
           </div>
         </div>
-       
+
         <div class="model">
           <div class="model-content">
             <div class="d-flex">
@@ -248,7 +248,7 @@
               @each(image in images)
                 <div class="col">
                   <div class="card card-hover m-2 img-box">
-                    <img src="/uploads/{{image.path}}" alt="{{image.name}}" aria-valuetext="{{image.id}}" data-checked="{{image.checked || false}}">
+                    <img src="{{image.url}}" alt="{{image.name}}" aria-valuetext="{{image.id}}" data-checked="{{image.checked || false}}">
                   </div>
                 </div>
               @endeach
@@ -257,7 +257,7 @@
         </div>
       </div>
     </div>
-    
+
     <button class="w-100 btn btn-success mb-5" type="submit">Atualizar</button>
 
   </form>
@@ -273,12 +273,12 @@
 
   var ids = [];
   var images = [];
-  
+
   window.onload = function() {
     for(var i = 0; i < imgBox.length; i++) {
       var img = imgBox[i].querySelector('img')
       if (img.getAttribute('data-checked') == 'true') {
-      
+
         var id = img.getAttribute('aria-valuetext');
         var url = img.getAttribute('src');
         var name = img.getAttribute('alt');
@@ -299,13 +299,13 @@
         document.querySelector('input[name="images"]').value = ids
 
         recriar(images);
-      } 
+      }
     }
   }
 
   busca.addEventListener('keyup', function(e){
     var value = e.target.value.toLocaleLowerCase();
-    
+
     for(var i = 0; i < imgBox.length; i++){
       var img = imgBox[i].querySelector('img');
       var text = img.getAttribute('alt').toLocaleLowerCase();
@@ -325,7 +325,7 @@
   for(var i = 0; i < imgBox.length; i++){
     imgBox[i].addEventListener('click', function(e){
       console.log(e.target.getAttribute('aria-valuetext'));
-      
+
       var verif = 0;
       for(var i = 0; i < images.length; i++){
           if(images[i].id == e.target.getAttribute('aria-valuetext')){

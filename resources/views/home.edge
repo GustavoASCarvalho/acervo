@@ -22,7 +22,7 @@
       <div class="col-12 col-md-6 col-lg-3 d-flex align-self-stretch my-2">
         <div class="card card-img">
           <a href="{{route('image.show', { id: image.id})}}">
-            <img src="/uploads/{{image.path}}" class="card-img-top" alt="{{image.name}}">
+            <img src="{{image.url}}" class="card-img-top" alt="{{image.name}}">
           </a>
           <div class="card-body">
             <h5 class="card-title">{{image.name}}</h5>
@@ -48,7 +48,7 @@
                   <p>{{post.description}}</p>
                 </div>
                 <a href="{{route('post.show', {id: post.id})}}" class="stretched-link"></a>
-            </li>  
+            </li>
         @endeach
       </ul>
     </div>

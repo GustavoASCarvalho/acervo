@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 // import Post from './Post'
 // import PostHasImage from './PostHasImage'
 
@@ -7,11 +7,11 @@ export default class Image extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  // @column()
-  // public url: string
-
   @column()
-  public path: string
+  public url: string
+
+  //@column()
+  //public path: string
 
   @column()
   public name?: string

@@ -7,7 +7,7 @@
   @entryPointStyles('nav')
 
   <style>
-      
+
       .card img {
         width: 100%;
         height: 300px;
@@ -31,15 +31,15 @@
         </div>
       </div>
     </section>
-  
+
     <div class="album py-5 bg-light">
       <div class="container">
-  
+
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             @each(image in images)
             <div class="col">
                 <div class="card shadow-sm">
-                    <img src="/uploads/{{image.path}}" alt="{{image.name}}">
+                    <img src="{{image.url}}" alt="{{image.name}}">
                 </div>
             </div>
             @endeach
